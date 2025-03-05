@@ -92,7 +92,7 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
+                            <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Girisik Yap</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
