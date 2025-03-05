@@ -76,7 +76,7 @@
                         <a class="nav-link" href="/categories"><i class="fas fa-list"></i> Kategoriler</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/topics"><i class="fas fa-newspaper"></i> Konular</a>
+                        <a class="nav-link" href="/topics"><i class="fas fa-newspaper"></i> En Çok Konuşulan Konular</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -92,7 +92,7 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Girisik Yap</a>
+                            <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
