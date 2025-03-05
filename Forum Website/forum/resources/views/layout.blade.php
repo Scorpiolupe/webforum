@@ -77,9 +77,20 @@
                             <i class="fas fa-list"></i> Kategoriler
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: var(--secondary-bg);">
-                            @foreach($categories as $category)
-                                <li><a class="dropdown-item text-light" href="/categories/{{ $category->id }}">{{ $category->name }}</a></li>
-                            @endforeach
+                            <div class="card-body">
+                                @if(isset($categories) && count($categories) > 0)
+                                    @foreach($categories as $category)
+                                        <div class="mb-2">
+                                            <a href="/categories/{{ $category->id }}" class="text-decoration-none text-light">
+                                                <i class="fas fa-folder"></i> {{ $category->name }}
+                                            </a>
+                                            <span class="badge bg-primary float-end">{{ $category->topics_count ?? 0 }}</span>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p class="text-center mb-0">Henüz kategori bulunmamaktadır.</p>
+                                @endif
+                            </div>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-light" href="/categories">Tüm Kategoriler</a></li>
                         </ul>
