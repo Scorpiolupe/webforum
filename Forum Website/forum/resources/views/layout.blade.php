@@ -12,6 +12,8 @@
             --dark-bg: #1a1a2e;
             --secondary-bg: #242438;
             --text-color: #e4e4e4;
+            --light-bg: #f8f9fa;
+            --dark-text:rgb(224, 224, 224);
         }
 
         body {
@@ -39,8 +41,9 @@
         }
 
         .card {
-            background-color: var(--secondary-bg);
+            background-color: var(--dark-bg);
             border: 1px solid var(--primary-color);
+            color: var(--dark-text);
         }
 
         .btn-primary {
@@ -57,6 +60,14 @@
             border-top: 2px solid var(--primary-color);
             padding: 1rem 0;
             margin-top: 2rem;
+        }
+
+        .text-light {
+            color: var(--dark-text) !important;
+        }
+
+        .bg-primary {
+            background-color: var(--primary-color) !important;
         }
     </style>
 </head>
@@ -88,7 +99,7 @@
                                         </div>
                                     @endforeach
                                 @else
-                                    <p class="text-center mb-0">Henüz kategori bulunmamaktadır.</p>
+                                    <p class="text-center mb-0" style="color: red;">Henüz kategori bulunmamaktadır.</p>
                                 @endif
                             </div>
                             <li><hr class="dropdown-divider"></li>
@@ -97,6 +108,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/topics"><i class="fas fa-newspaper"></i> En Çok Konuşulan Konular</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact"><i class="fas fa-envelope"></i> İletişim</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
