@@ -10,7 +10,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('categories.index', compact('categories'));
+        return view('home', compact('categories'));
     }
 
     public function show($id)
@@ -19,8 +19,5 @@ class CategoryController extends Controller
         return view('categories.show', compact('category'));
     }
 
-    public function __construct()
-    {
-        view()->share('categories', Category::all());
-    }
+   
 }
