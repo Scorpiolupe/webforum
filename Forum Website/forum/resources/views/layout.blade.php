@@ -61,9 +61,9 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4" style="padding: 1rem 0;">
         <div class="container">
-            <a class="navbar-brand" href="/"><i class="fas fa-comments"></i> Forum</a>
+            <a class="navbar-brand" href="/" style="font-size: 2rem;"><i class="fas fa-comments fa-lg"></i> Forum</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -72,8 +72,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/"><i class="fas fa-home"></i> Ana Sayfa</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/categories"><i class="fas fa-list"></i> Kategoriler</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-list"></i> Kategoriler
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: var(--secondary-bg);">
+                            @foreach($categories as $category)
+                                <li><a class="dropdown-item text-light" href="/categories/{{ $category->id }}">{{ $category->name }}</a></li>
+                            @endforeach
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-light" href="/categories">Tüm Kategoriler</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/topics"><i class="fas fa-newspaper"></i> En Çok Konuşulan Konular</a>
