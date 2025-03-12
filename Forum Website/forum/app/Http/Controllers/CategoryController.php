@@ -12,12 +12,5 @@ class CategoryController extends Controller
         $categories = Category::all();
         return view('home', compact('categories'));
     }
-
-    public function show($id)
-    {
-        $category = Category::findOrFail($id);
-        return view('categories.show', compact('category'));
-    }
-
    
 }

@@ -9,6 +9,4 @@ Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/topics', [PageController::class, 'topics'])->name('topics');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 
-Route::get('/', [CategoryController::class, 'index'])->name('layout');
-Route::get('/categories/{id}',[CategoryController::class, 'show']);
-
+Route::get('/', [CategoryController::class, 'index']);

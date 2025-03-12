@@ -102,8 +102,6 @@
                                     <p class="text-center mb-0" style="color: red;">Henüz kategori bulunmamaktadır.</p>
                                 @endif
                             </div>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-light" href="/categories">Tüm Kategoriler</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

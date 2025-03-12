@@ -10,12 +10,7 @@ class PageController extends Controller
     {
         return view('home');
     }
-
-    public function categories()
-    {
-        return view('categories');
-    }
-
+    
     public function topics()
     {
         return view('topics');
