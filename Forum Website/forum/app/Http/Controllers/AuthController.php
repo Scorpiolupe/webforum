@@ -23,7 +23,6 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             
-            // redirect()->intended() kullan, back()->redirect() değil
             return redirect()->intended(route('home')); 
         }
 
@@ -47,8 +46,6 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        
-        // route() helper'ı ile route ismi kullan
         return redirect()->route('home');
     }
 
@@ -57,8 +54,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
-        // route() helper'ı ile route ismi kullan
         return redirect()->route('home');
     }
 }
