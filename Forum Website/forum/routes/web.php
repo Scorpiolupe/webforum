@@ -10,6 +10,8 @@ Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/topics', [PageController::class, 'topics'])->name('topics');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 
+Route::get('/panel', [PageController::class, 'panel'])->name('panel');
+
 Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/auth', [AuthController::class, 'showLoginForm'])->name('auth');
 Route::post('/login', [AuthController::class, 'login'])->name('login');

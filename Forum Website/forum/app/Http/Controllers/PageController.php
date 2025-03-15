@@ -21,7 +21,13 @@ class PageController extends Controller
         return view('contact');
     }
 
-    public function auth(){
+    public function auth()
+    {
         return view('auth');
+    }
+
+    public function panel()
+    {
+        return view('panel');
     }
 }
