@@ -107,7 +107,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/topics"><i class="fas fa-newspaper"></i> En Çok Konuşulan Konular</a>
+                        <a class="nav-link" href="/topics"><i class="fas fa-newspaper"></i> Konular</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/contact"><i class="fas fa-envelope"></i> İletişim</a>
