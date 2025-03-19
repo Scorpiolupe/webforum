@@ -98,6 +98,9 @@
                                         <button class="btn btn-sm btn-danger reject-btn" data-id="{{ $question->id }}">
                                             <i class="fas fa-times"></i> Reddet
                                         </button>
+                                        <button class="btn btn-sm btn-info detail-btn" data-id="{{ $question->id }}">
+                                            <i class="fas fa-info-circle"></i> Detay
+                                        </button>
                                     </td>
                                 </tr>
                                 @empty
@@ -108,6 +111,20 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Bekleyen Soru Detay Kartı -->
+            <div class="card mb-4 position-fixed top-50 start-50 translate-middle" id="question-detail-card" style="display: none; background-color: #343a40; color: white;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Soru Detayları</h5>
+                    <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="$('#question-detail-card').hide();"></button>
+                </div>
+                <div class="card-body">
+                    <h5 id="question-title"></h5>
+                    <p id="question-content"></p>
+                    <p><strong>Yazar:</strong> <span id="question-author"></span></p>
+                    <p><strong>Tarih:</strong> <span id="question-date"></span></p>
                 </div>
             </div>
 
@@ -176,6 +193,26 @@
                 }
             });
         }
+    });
+
+    // Soru detaylarını göster
+    $('.detail-btn').click(function() {
+        const questionId = $(this).data('id');
+
+        $.ajax({
+            url: '{{ route("panel.questionDetail") }}',
+            type: 'GET',
+            data: { id: questionId },
+            success: function(response) {
+                if (response.success) {
+                    $('#question-title').text(response.data.title);
+                    $('#question-content').text(response.data.content);
+                    $('#question-author').text(response.data.author);
+                    $('#question-date').text(response.data.date);
+                    $('#question-detail-card').show();
+                }
+            }
+        });
     });
 </script>
 @endpush
