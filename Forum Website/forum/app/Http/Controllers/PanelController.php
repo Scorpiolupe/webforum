@@ -9,7 +9,7 @@ class PanelController extends Controller
 {
     public function index()
     {
-        // İstatistikler için veri çekme
+        // İstatistikler için veri çekme yarak
         $activeUsers = User::count();
         $totalQuestions = 0; // Model oluşturulduğunda güncellenecek
         $pendingQuestions = 0; // Model oluşturulduğunda güncellenecek  
