@@ -39,4 +39,19 @@ class Question extends Model
     {
         return $this->hasMany(Reply::class);
     }
+
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function upvotes()
+    {
+        return $this->votes()->where('is_upvote', true);
+    }
+
+    public function downvotes()
+    {
+        return $this->votes()->where('is_downvote', true);
+    }
 }
