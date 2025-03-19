@@ -63,7 +63,7 @@
                     <div class="card text-white bg-info">
                         <div class="card-body">
                             <h5 class="card-title">Toplam Cevap</h5>
-                            <h2 class="card-text">{{ $totalAnswers ?? 0 }}</h2>
+                            <h2 class="card-text">{{ $totalAnswers ?? 0 }}</h5>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                                 @forelse ($pendingQuestionsList ?? [] as $question)
                                 <tr>
                                     <td>{{ $question->title ?? '' }}</td>
-                                    <td>{{ $question->author->name ?? '' }}</td>
+                                    <td>{{ $question->user->username ?? '' }}</td>
                                     <td>{{ $question->created_at ?? '' }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-success approve-btn" data-id="{{ $question->id }}">
@@ -139,13 +139,43 @@
     // Soruyu onayla
     $('.approve-btn').click(function() {
         const questionId = $(this).data('id');
-        // AJAX çağrınızı buraya ekleyin
+        const row = $(this).closest('tr');
+        
+        $.ajax({
+            url: '{{ route("panel.approve") }}',
+            type: 'POST',
+            data: {
+                id: questionId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    row.fadeOut();
+                }
+            }
+        });
     });
 
     // Soruyu reddet
     $('.reject-btn').click(function() {
         const questionId = $(this).data('id');
-        // AJAX çağrınızı buraya ekleyin
+        const row = $(this).closest('tr');
+
+        if (confirm('Bu soruyu silmek istediğinizden emin misiniz?')) {
+            $.ajax({
+                url: '{{ route("panel.reject") }}',
+                type: 'POST',
+                data: {
+                    id: questionId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        row.fadeOut();
+                    }
+                }
+            });
+        }
     });
 </script>
 @endpush

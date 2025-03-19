@@ -75,7 +75,7 @@
                                                 {{ $topic->title }}
                                             </a>
                                         </h5>
-                                        <p class="card-text text-muted">
+                                        <p class="card-text text-light text-muted">
                                             <small>
                                                 <i class="fas fa-user"></i> {{ $topic->user->name ?? 'Anonim' }} |
                                                 <i class="fas fa-folder"></i> {{ $topic->category->name ?? 'Kategorisiz' }} |

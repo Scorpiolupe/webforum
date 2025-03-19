@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class PanelController extends Controller
 {
     public function index()
-    {   // A
+    {   
         // İstatistikler için veri çekme
         $activeUsers = DB::table('sessions')
             ->where('last_activity', '>=', now()->subMinutes(30)->timestamp)
@@ -20,9 +20,9 @@ class PanelController extends Controller
         $pendingQuestions = Question::where('is_approved', false)->count();
         $totalAnswers = Question::where('answer_count', '>', 0)->count();
 
-        // Bekleyen sorular listesi
-        $pendingQuestionsList = Question::where('is_resolved', false)
-            ->with('user')
+        // Bekleyen sorular listesi - onaylanmamış sorular
+        $pendingQuestionsList = Question::where('is_approved', false)
+            ->with('user', 'category')
             ->latest()
             ->take(10)
             ->get();
@@ -42,15 +42,18 @@ class PanelController extends Controller
 
     public function approveQuestion(Request $request)
     {
-        $questionId = $request->input('id');
-        // Onaylama işlemi burada yapılacak
+        $question = Question::findOrFail($request->id);
+        $question->status = 'approved';
+        $question->save();
+
         return response()->json(['success' => true]);
     }
-
-    public function rejectQuestion(Request $request) 
+    
+    public function rejectQuestion(Request $request)
     {
-        $questionId = $request->input('id');
-        // Reddetme işlemi burada yapılacak
+        $question = Question::findOrFail($request->id);
+        $question->delete();
+        
         return response()->json(['success' => true]);
     }
 }
