@@ -102,8 +102,6 @@
                                     <p class="text-center mb-0" style="color: red;">Henüz kategori bulunmamaktadır.</p>
                                 @endif
                             </div>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-light" href="/categories">Tüm Kategoriler</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -126,10 +124,10 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
+                            <a class="nav-link" href="/auth"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
+                            <a class="nav-link" href="/auth"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
                         </li>
                     @endauth
                 </ul>

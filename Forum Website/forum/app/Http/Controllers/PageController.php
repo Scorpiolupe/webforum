@@ -13,12 +13,7 @@ class PageController extends Controller
     {
         return view('home');
     }
-
-    public function categories()
-    {
-        return view('categories');
-    }
-
+    
     public function topics()
     {
         return view('topics');
@@ -27,5 +22,9 @@ class PageController extends Controller
     public function contact()
     {
         return view('contact');
+    }
+
+    public function auth(){
+        return view('auth');
     }
 }
