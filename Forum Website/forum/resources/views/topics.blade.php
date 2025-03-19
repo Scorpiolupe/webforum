@@ -115,7 +115,7 @@
                                         </p>
                                     </div>
                                     <div>
-                                        <span class="badge bg-primary">{{ $topic->views ?? 0 }} Görüntülenme</span>
+                                        <span class="badge bg-primary">{{ $topic->view_count ?? 0 }} Görüntülenme</span>
                                     </div>
                                 </div>
                             </div>
