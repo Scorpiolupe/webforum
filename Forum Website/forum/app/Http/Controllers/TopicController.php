@@ -57,4 +57,20 @@ class TopicController extends Controller
             
         return view('topics', compact('topics'));
     }
+
+    public function reply(Request $request, Question $question)
+    {
+        $validated = $request->validate([
+            'content' => 'required|min:5'
+        ]);
+
+        $reply = $question->replies()->create([
+            'user_id' => Auth::id(),
+            'content' => $validated['content']
+        ]);
+
+        $question->increment('answer_count');
+
+        return redirect()->back()->with('success', 'Yanıtınız başarıyla eklendi.');
+    }
 }

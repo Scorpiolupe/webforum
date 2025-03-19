@@ -28,5 +28,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/topics', [TopicController::class, 'store'])->name('topics.store');
 Route::get('/topics/create', [TopicController::class, 'create'])->name('topics.create');
 Route::get('/topics/{question}', [TopicController::class, 'show'])->name('topics.show');
+Route::post('/topics/{question}/reply', [TopicController::class, 'reply'])->name('topics.reply')->middleware('auth');
 
 Route::get('/categories', [CategoryController::class, 'index']);

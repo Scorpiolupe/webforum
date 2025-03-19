@@ -9,7 +9,7 @@
             <div class="card-header">
                 <h2 class="text-light mb-0">{{ $topic->title }}</h2>
                 <small class="text-muted">
-                    <i class="fas fa-user"></i> {{ $topic->user->name }} |
+                    <i class="fas fa-user"></i> {{ $topic->user->username }} |
                     <i class="fas fa-folder"></i> {{ $topic->category->name }} |
                     <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }} |
                     <i class="fas fa-eye"></i> {{ $topic->view_count }} görüntülenme

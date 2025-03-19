@@ -77,7 +77,7 @@
                                         </h5>
                                         <p class="card-text text-light text-muted">
                                             <small>
-                                                <i class="fas fa-user"></i> {{ $topic->user->name ?? 'Anonim' }} |
+                                                <i class="fas fa-user"></i> {{ $topic->user->username ?? 'Anonim' }} |
                                                 <i class="fas fa-folder"></i> {{ $topic->category->name ?? 'Kategorisiz' }} |
                                                 <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }} |
                                                 <i class="fas fa-comments"></i> {{ $topic->replies_count ?? 0 }} Yanıt
