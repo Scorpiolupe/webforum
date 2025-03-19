@@ -5,6 +5,36 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
+        <!-- Arama ve Filtreleme Bölümü -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary">
+                                <i class="fas fa-search text-light"></i>
+                            </span>
+                            <input type="text" id="searchInput" class="form-control" 
+                                   placeholder="Konu başlığı ara...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="categoryFilter" class="form-select">
+                            <option value="">Tüm Kategoriler</option>
+                            @foreach($categories ?? [] as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="resetFilters" class="btn btn-secondary w-100">
+                            <i class="fas fa-undo"></i> Sıfırla
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @auth
             <div class="card mb-4 collapse" id="newTopicCard">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -66,7 +96,7 @@
             <div class="card-body">
                 @if(isset($topics) && count($topics) > 0)
                     @foreach($topics as $topic)
-                        <div class="card mb-3">
+                        <div class="card mb-3 topic-card" data-category-id="{{ $topic->category_id ?? '' }}">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
@@ -126,11 +156,60 @@
 .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
+
+#searchInput::placeholder {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.topic-card {
+    display: block;
+}
+
+.topic-card.hidden {
+    display: none;
+}
 </style>
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const resetButton = document.getElementById('resetFilters');
+    const topicCards = document.querySelectorAll('.card.mb-3');
+
+    function filterTopics() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedCategory = categoryFilter.value;
+
+        topicCards.forEach(card => {
+            const title = card.querySelector('.card-title a').textContent.toLowerCase();
+            const category = card.querySelector('.fa-folder').parentElement.textContent;
+            const categoryId = card.getAttribute('data-category-id');
+
+            const matchesSearch = title.includes(searchTerm);
+            const matchesCategory = !selectedCategory || categoryId === selectedCategory;
+
+            if (matchesSearch && matchesCategory) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', filterTopics);
+    categoryFilter.addEventListener('change', filterTopics);
+    
+    resetButton.addEventListener('click', () => {
+        searchInput.value = '';
+        categoryFilter.value = '';
+        topicCards.forEach(card => card.classList.remove('hidden'));
+    });
+
+    // Form validation (existing code)
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function(event) {
