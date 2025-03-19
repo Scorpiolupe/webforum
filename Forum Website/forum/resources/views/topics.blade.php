@@ -36,7 +36,7 @@
         </div>
 
         @auth
-            <div class="card mb-4 collapse" id="newTopicCard">
+            <div class="card mb-4 text-light collapse" id="newTopicCard">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="fas fa-plus"></i> Yeni Konu Oluştur</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-toggle="collapse" data-bs-target="#newTopicCard"></button>
@@ -114,8 +114,14 @@
                                             </small>
                                         </p>
                                     </div>
-                                    <div>
-                                        <span class="badge bg-primary">{{ $topic->views ?? 0 }} Görüntülenme</span>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-primary me-2">{{ $topic->view_count ?? 0 }} Görüntülenme</span></span>
+                                        <button class="btn btn-outline-success btn-sm me-1 upvote-btn" data-id="{{ $topic->id }}">
+                                            <i class="fas fa-arrow-up"></i> {{ $topic->upvotes()->count() }}
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm downvote-btn" data-id="{{ $topic->id }}">
+                                            <i class="fas fa-arrow-down"></i> {{ $topic->downvotes()->count() }}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -174,6 +180,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const searchInput = document.getElementById('searchInput');
     const categoryFilter = document.getElementById('categoryFilter');
     const resetButton = document.getElementById('resetFilters');
@@ -220,6 +227,39 @@ document.addEventListener('DOMContentLoaded', function() {
             form.classList.add('was-validated');
         });
     }
+
+    // Upvote and Downvote functionality
+    document.querySelectorAll('.upvote-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const questionId = this.getAttribute('data-id');
+            axios.post('/questions/' + questionId + '/upvote')
+                .then(response => {
+                    if (response.data.success) {
+                        this.querySelector('i').nextSibling.textContent = ' ' + response.data.upvotes;
+                        this.nextElementSibling.querySelector('i').nextSibling.textContent = ' ' + response.data.downvotes;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    });
+
+    document.querySelectorAll('.downvote-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const questionId = this.getAttribute('data-id');
+            axios.post('/questions/' + questionId + '/downvote')
+                .then(response => {
+                    if (response.data.success) {
+                        this.querySelector('i').nextSibling.textContent = ' ' + response.data.downvotes;
+                        this.previousElementSibling.querySelector('i').nextSibling.textContent = ' ' + response.data.upvotes;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    });
 });
 </script>
 @endpush
