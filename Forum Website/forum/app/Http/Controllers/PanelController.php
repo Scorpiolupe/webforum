@@ -17,11 +17,15 @@ class PanelController extends Controller
             ->distinct('user_id')
             ->count();
         $totalQuestions = Question::count();
-        $pendingQuestions = 0; // Model oluşturulduğunda güncellenecek  
-        $totalAnswers = 0; // Model oluşturulduğunda güncellenecek
+        $pendingQuestions = Question::where('is_approved', false)->count();
+        $totalAnswers = Question::where('answer_count', '>', 0)->count();
 
         // Bekleyen sorular listesi
-        $pendingQuestionsList = []; // Model oluşturulduğunda güncellenecek
+        $pendingQuestionsList = Question::where('is_resolved', false)
+            ->with('user')
+            ->latest()
+            ->take(10)
+            ->get();
 
         // Son aktiviteler
         $recentActivities = []; // Model oluşturulduğunda güncellenecek

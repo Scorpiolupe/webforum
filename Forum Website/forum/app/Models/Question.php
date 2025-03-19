@@ -13,6 +13,13 @@ class Question extends Model
         'category_id', 
         'title',
         'content',
+        'is_approved',
+        'is_locked',
+        'is_pinned',
+        'upvotes',
+        'downvotes',
+        'answer_count',
+        'best_answer_id',
         'view_count',
         'is_resolved'
     ];
