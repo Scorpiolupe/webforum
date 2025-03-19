@@ -20,6 +20,7 @@ class CategorySeeder extends Seeder
             ['name' => 'Eğitim'],
             ['name' => 'Sağlık'],
             ['name' => 'Spor'],
+            ['name'=>'Diğer'],
         ];
 
         foreach ($categories as $category) {
