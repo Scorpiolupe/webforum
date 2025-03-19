@@ -17,5 +17,5 @@ Route::get('/auth', [AuthController::class, 'showLoginForm'])->name('auth');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-// YARAK
+
 Route::get('/categories', [CategoryController::class, 'index']);

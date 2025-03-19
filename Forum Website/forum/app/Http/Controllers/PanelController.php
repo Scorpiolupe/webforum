@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PanelController extends Controller
 {
     public function index()
     {
         // İstatistikler için veri çekme
-        $activeUsers = User::count();
-        $totalQuestions = 0; // Model oluşturulduğunda güncellenecek
+        $activeUsers = DB::table('sessions')
+            ->where('last_activity', '>=', now()->subMinutes(30)->timestamp)
+            ->distinct('user_id')
+            ->count();
+        $totalQuestions = Question::count();
         $pendingQuestions = 0; // Model oluşturulduğunda güncellenecek  
         $totalAnswers = 0; // Model oluşturulduğunda güncellenecek
 
