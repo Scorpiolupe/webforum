@@ -32,7 +32,7 @@
                         <div class="reply border-bottom border-secondary pb-3 mb-3">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <strong class="text-light">{{ $reply->user->name }}</strong>
+                                    <strong class="text-light">{{ $reply->user->username }}</strong>
                                     <small class="text-muted">{{ $reply->created_at->diffForHumans() }}</small>
                                 </div>
                             </div>
