@@ -16,9 +16,11 @@ class PanelController extends Controller
             ->where('last_activity', '>=', now()->subMinutes(30)->timestamp)
             ->distinct('user_id')
             ->count();
-        $totalQuestions = Question::count();
+        $totalQuestions = Question::where('is_approved', true)->count();
         $pendingQuestions = Question::where('is_approved', false)->count();
-        $totalAnswers = Question::where('answer_count', '>', 0)->count();
+        $totalAnswers = Question::where('answer_count', '>', 0)
+            ->where('is_approved', true)
+            ->count();
 
         // Bekleyen sorular listesi - onaylanmamış sorular
         $pendingQuestionsList = Question::where('is_approved', false)
@@ -43,7 +45,7 @@ class PanelController extends Controller
     public function approveQuestion(Request $request)
     {
         $question = Question::findOrFail($request->id);
-        $question->status = 'approved';
+        $question->is_approved = true;
         $question->save();
 
         return response()->json(['success' => true]);
@@ -55,5 +57,20 @@ class PanelController extends Controller
         $question->delete();
         
         return response()->json(['success' => true]);
+    }
+
+    public function questionDetail(Request $request)
+    {
+        $question = Question::with('user')->findOrFail($request->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'title' => $question->title,
+                'content' => $question->content,
+                'author' => $question->user->username,
+                'date' => $question->created_at->format('d-m-Y H:i')
+            ]
+        ]);
     }
 }

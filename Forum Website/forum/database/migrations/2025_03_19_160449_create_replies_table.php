@@ -19,7 +19,8 @@ return new class extends Migration
             $table->boolean('is_solution')->default(false);
             $table->integer('upvotes')->default(0);
             $table->integer('downvotes')->default(0);
-            $table->timestamps();
+            $table->string('created_at');
+            $table->string('updated_at');
         });
     }
 

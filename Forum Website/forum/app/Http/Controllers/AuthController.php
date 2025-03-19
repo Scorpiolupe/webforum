@@ -19,13 +19,14 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ]);
-
+    
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             
-            return redirect()->intended(route('home')); 
+            // Remove intended() and directly redirect to home
+            return redirect()->route('home');
         }
-
+    
         return back()->withErrors([
             'email' => 'Verilen bilgiler kayıtlarımızla eşleşmiyor.',
         ]);

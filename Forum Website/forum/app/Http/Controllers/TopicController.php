@@ -24,19 +24,20 @@ class TopicController extends Controller
         }
 
         $validated = $request->validate([
-            'title' => 'required|min:5|max:255',
-            'content' => 'required|min:20',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
             'category_id' => 'required|exists:categories,id'
         ]);
 
         $question = Question::create([
-            'user_id' => Auth::id(),
-            'category_id' => $validated['category_id'],
             'title' => $validated['title'],
-            'content' => $validated['content']
+            'content' => $validated['content'],
+            'category_id' => $validated['category_id'],
+            'user_id' => Auth::id(),
+            'is_approved' => false // Varsayılan olarak onaysız
         ]);
 
-        return redirect()->route('topics.show', $question->id)
+        return redirect()->route('home')
             ->with('success', 'Sorunuz başarıyla oluşturuldu ve onay için gönderildi.');
     }
 
@@ -52,6 +53,7 @@ class TopicController extends Controller
     public function index()
     {
         $topics = Question::with(['user', 'category'])
+            ->where('is_approved', true) // Sadece onaylı soruları göster
             ->orderBy('created_at', 'desc')
             ->paginate(15);
             

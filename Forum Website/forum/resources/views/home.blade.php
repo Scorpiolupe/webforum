@@ -58,7 +58,7 @@
                             <a href="/categories/{{ $category->id }}" class="text-decoration-none text-light">
                                 <i class="fas fa-folder"></i> {{ $category->name }}
                             </a>
-                            <span class="badge bg-primary float-end">{{ $category->topics_count ?? 0 }}</span>
+                            <span class="badge bg-primary float-end">{{ $category->questions_count ?? 0 }}</span>
                         </div>
                     @endforeach
                 @else

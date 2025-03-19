@@ -13,13 +13,16 @@ Route::get('/topics', [TopicController::class, 'index'])->name('topics');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 
 Route::get('/panel', [PanelController::class, 'index'])->name('panel')->middleware('auth');
+Route::get('/panel/question-detail', [PanelController::class, 'questionDetail'])->name('panel.questionDetail');
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::post('/panel/approve-question', 'PanelController@approveQuestion')->name('panel.approve');
-    Route::post('/panel/reject-question', 'PanelController@rejectQuestion')->name('panel.reject');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/panel/approve-question', [PanelController::class, 'approveQuestion'])
+        ->name('panel.approve');
+    Route::post('/panel/reject-question', [PanelController::class, 'rejectQuestion'])
+        ->name('panel.reject');
 });
 
-Route::get('/', [PageController::class, 'index'])->name('home');
+// Auth routes
 Route::get('/auth', [AuthController::class, 'showLoginForm'])->name('auth');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
