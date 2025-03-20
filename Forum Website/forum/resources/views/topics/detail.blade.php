@@ -8,7 +8,8 @@
         <div class="card bg-dark">
             <div class="card-header">
                 <h2 class="text-light mb-0">{{ $topic->title }}</h2>
-                <small class="text-muted">
+                <br>
+                <small class="text-muted text-light">
                     <i class="fas fa-user"></i> {{ $topic->user->username }} |
                     <i class="fas fa-folder"></i> {{ $topic->category->name }} |
                     <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }} |

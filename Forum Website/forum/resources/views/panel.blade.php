@@ -70,7 +70,7 @@
             </div>
 
             <!-- Bekleyen Sorular Tablosu -->
-            <div class="card mb-4">
+            <div class="card mb-4 text-light">
                 <div class="card-header">
                     <h5 class="mb-0">Bekleyen Sorular</h5>
                 </div>
@@ -129,7 +129,7 @@
             </div>
 
             <!-- Son Aktiviteler -->
-            <div class="card">
+            <div class="card text-light">
                 <div class="card-header">
                     <h5 class="mb-0">Son Aktiviteler</h5>
                 </div>
