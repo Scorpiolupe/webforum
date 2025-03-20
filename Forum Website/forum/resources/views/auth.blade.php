@@ -20,7 +20,7 @@
                     </li>
                 </ul>
 
-                <div class="tab-content" id="authTabContent">
+                <div class="tab-content text-light" id="authTabContent">
                     <!-- Login Form -->
                     <div class="tab-pane fade show active" id="login" role="tabpanel">
                         <form action="{{ route('login') }}" method="POST" class="needs-validation" novalidate>
@@ -64,7 +64,7 @@
                     </div>
 
                     <!-- Register Form -->
-                    <div class="tab-pane fade" id="register" role="tabpanel">
+                    <div class="tab-pane fade text-light" id="register" role="tabpanel">
                         <form action="{{ route('register') }}" method="POST" class="needs-validation" novalidate>
                             @csrf
                             <div class="mb-3">

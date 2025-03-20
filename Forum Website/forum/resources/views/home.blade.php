@@ -32,7 +32,7 @@
                                         </small>
                                     </div>
                                     <div>
-                                        <span class="badge bg-primary">{{ $topic->views ?? 0 }} <i class="fas fa-eye"></i></span>
+                                        <span class="badge bg-primary">{{ $topic->view_count ?? 0 }} <i class="fas fa-eye"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                             <a href="/categories/{{ $category->id }}" class="text-decoration-none text-light">
                                 <i class="fas fa-folder"></i> {{ $category->name }}
                             </a>
-                            <span class="badge bg-primary float-end">{{ $category->questions_count ?? 0 }}</span>
+                            <span class="badge bg-primary float-end">{{ count($category->questions) ?? 0 }}</span>
                         </div>
                     @endforeach
                 @else

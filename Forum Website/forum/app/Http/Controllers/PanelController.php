@@ -11,7 +11,7 @@ class PanelController extends Controller
 {
     public function index()
     {   
-        // İstatistikler için veri çekme
+        
         $activeUsers = DB::table('sessions')
             ->where('last_activity', '>=', now()->subMinutes(30)->timestamp)
             ->distinct('user_id')
@@ -22,15 +22,15 @@ class PanelController extends Controller
             ->where('is_approved', true)
             ->count();
 
-        // Bekleyen sorular listesi - onaylanmamış sorular
+       
         $pendingQuestionsList = Question::where('is_approved', false)
             ->with('user', 'category')
             ->latest()
             ->take(10)
             ->get();
 
-        // Son aktiviteler
-        $recentActivities = []; // Model oluşturulduğunda güncellenecek
+      
+        $recentActivities = []; 
 
         return view('panel', compact(
             'activeUsers',

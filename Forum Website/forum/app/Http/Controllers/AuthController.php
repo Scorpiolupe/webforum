@@ -23,7 +23,6 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             
-            // Remove intended() and directly redirect to home
             return redirect()->route('home');
         }
     
