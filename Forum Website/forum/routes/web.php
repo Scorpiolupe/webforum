@@ -33,6 +33,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/topics', [TopicController::class, 'store'])->name('topics.store');
 Route::get('/topics/create', [TopicController::class, 'create'])->name('topics.create');
 Route::get('/topics/{question}', [TopicController::class, 'show'])->name('topics.show');
+Route::get('/topics/{question}/edit', [TopicController::class, 'edit'])->name('topics.edit');
+Route::put('/topics/{question}', [TopicController::class, 'update'])->name('topics.update');
 Route::post('/topics/{question}/reply', [TopicController::class, 'reply'])->name('topics.reply')->middleware('auth');
 Route::post('/questions/{question}/upvote', [VoteController::class, 'upvote'])->middleware('auth');
 Route::post('/questions/{question}/downvote', [VoteController::class, 'downvote'])->middleware('auth');

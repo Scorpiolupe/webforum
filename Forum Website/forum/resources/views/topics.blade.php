@@ -110,7 +110,7 @@
                                                 <i class="fas fa-user"></i> {{ $topic->user->username ?? 'Anonim' }} |
                                                 <i class="fas fa-folder"></i> {{ $topic->category->name ?? 'Kategorisiz' }} |
                                                 <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }} |
-                                                <i class="fas fa-comments"></i> {{ count($topic->replies) ?? 0 }} Yanıt
+                                                <i class="fas fa-comments"></i> {{ is_countable($topic->replies) ? count($topic->replies) : 0 }} Yanıt
                                             </small>
                                         </p>
                                     </div>

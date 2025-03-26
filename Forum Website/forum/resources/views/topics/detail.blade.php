@@ -16,6 +16,14 @@
                     <i class="fas fa-eye"></i> {{ $topic->view_count }} görüntülenme
                 </small>
             </div>
+            @auth
+                <p>Current User ID: {{ Auth::id() }}</p>
+            @endauth
+            @if (Auth::id()==$topic->user_id)
+            <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-warning btn-sm">
+                <i class="fas fa-edit"></i> Düzenle
+            </a>
+            @endif
             <div class="card-body">
                 <div class="topic-content text-light">
                     {{ $topic->content }}
