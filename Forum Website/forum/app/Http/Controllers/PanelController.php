@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class PanelController extends Controller
 {
     public function index()
-    {   
+    {   //asdasd
         if(!Auth::check() || Auth::user()->is_admin == false) {
             return redirect()->route('home')->with('error', 'Bu sayfaya erişmek için gerekli yetkiye sahip değilsin.');
         }

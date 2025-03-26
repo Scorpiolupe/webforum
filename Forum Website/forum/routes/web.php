@@ -16,12 +16,8 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/panel', [PanelController::class, 'index'])->name('panel');
 Route::get('/panel/question-detail', [PanelController::class, 'questionDetail'])->name('panel.questionDetail');
 
-Route::middleware(['auth'])->group(function () {
-    Route::post('/panel/approve-question', [PanelController::class, 'approveQuestion'])
-        ->name('panel.approve');
-    Route::post('/panel/reject-question', [PanelController::class, 'rejectQuestion'])
-        ->name('panel.reject');
-});
+Route::post('/panel/approve-question', [PanelController::class, 'approveQuestion'])->name('panel.approve');
+Route::post('/panel/reject-question', [PanelController::class, 'rejectQuestion'])->name('panel.reject');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/questions/{questionId}/upvote', [VoteController::class, 'upvote'])->name('questions.upvote');
