@@ -115,7 +115,7 @@
             </div>
 
             <!-- Bekleyen Soru Detay Kartı -->
-            <div class="card mb-4 position-fixed top-50 start-50 translate-middle" id="question-detail-card" style="display: none; background-color: #343a40; color: white;">
+            <div class="card mb-4 position-fixed top-50 start-50 translate-middle" id="question-detail-card" style="display: none; background-color: #343a40; color: white; z-index: 1050;">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Soru Detayları</h5>
                     <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="$('#question-detail-card').hide();"></button>
@@ -123,13 +123,14 @@
                 <div class="card-body">
                     <h5 id="question-title"></h5>
                     <p id="question-content"></p>
+                    <p><strong>Yazar ID:</strong> <span id="question-author-id"></span></p>
                     <p><strong>Yazar:</strong> <span id="question-author"></span></p>
                     <p><strong>Tarih:</strong> <span id="question-date"></span></p>
                 </div>
             </div>
 
             <!-- Son Aktiviteler -->
-            <div class="card text-light">
+            <div class="card mb-4 text-light">
                 <div class="card-header">
                     <h5 class="mb-0">Son Aktiviteler</h5>
                 </div>
@@ -147,6 +148,77 @@
                     </ul>
                 </div>
             </div>
+
+            <div class="card text-light">
+                <div class="card-header">
+                    <h5 class="mb-0">Kullanıcılar</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-2">Üyeler</h6>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Email</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($users as $user)
+                                <tr>
+                                    <td>{{ $user->id }}</td>
+                                    <td><i class="fas fa-user me-2"></i>{{ $user->username }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success approve-btn" data-id="{{ $user->id }}">
+                                            <i class="fas fa-check"></i> Doğrula
+                                        </button>
+                                        <button class="btn btn-sm btn-danger reject-btn" data-id="{{ $user->id }}">
+                                            <i class="fas fa-times"></i> Ban
+                                        </button>
+                                        <button class="btn btn-sm btn-primary detail-btn" data-id="{{ $user->id }}">
+                                            <i class="fas fa-crown"></i> Yetki Ver
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary detail-btn" data-id="{{ $user->id }}">
+                                            <i class="fas fa-caret-down"></i> Diğer İşlemler
+                                        </button>
+                                        <button class="btn btn-sm btn-info detail-btn" data-id="{{ $user->id }}">
+                                            <i class="fas fa-info-circle"></i> Bilgiler
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h6 class="mb-2 mt-4">Adminler</h6>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Email</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($admins as $admin)
+                                <tr>
+                                    <td>{{ $admin->id }}</td>
+                                    <td><i class="fas fa-crown me-2"></i>{{ $admin->username }}</td>
+                                    <td>{{ $admin->email }}</td>
+                                    <td></td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -157,7 +229,7 @@
     $('.approve-btn').click(function() {
         const questionId = $(this).data('id');
         const row = $(this).closest('tr');
-        
+
         $.ajax({
             url: '{{ route("panel.approve") }}',
             type: 'POST',
@@ -202,11 +274,14 @@
         $.ajax({
             url: '{{ route("panel.questionDetail") }}',
             type: 'GET',
-            data: { id: questionId },
+            data: {
+                id: questionId
+            },
             success: function(response) {
                 if (response.success) {
                     $('#question-title').text(response.data.title);
                     $('#question-content').text(response.data.content);
+                    $('#question-author-id').text(response.data.author_id);
                     $('#question-author').text(response.data.author);
                     $('#question-date').text(response.data.date);
                     $('#question-detail-card').show();

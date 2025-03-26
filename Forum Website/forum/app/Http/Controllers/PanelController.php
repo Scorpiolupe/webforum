@@ -11,10 +11,13 @@ use Illuminate\Support\Facades\DB;
 class PanelController extends Controller
 {
     public function index()
-    {   //asdasd
+    {
         if(!Auth::check() || Auth::user()->is_admin == false) {
             return redirect()->route('home')->with('error', 'Bu sayfaya erişmek için gerekli yetkiye sahip değilsin.');
         }
+        
+        $users = User::where('is_admin', false)->take(10)->get();
+        $admins = User::where('is_admin', true)->take(10)->get();
         
         $activeUsers = DB::table('sessions')
             ->where('last_activity', '>=', now()->subMinutes(30)->timestamp)
@@ -37,6 +40,8 @@ class PanelController extends Controller
         $recentActivities = []; 
 
         return view('panel', compact(
+            'users',
+            'admins',
             'activeUsers',
             'totalQuestions', 
             'pendingQuestions',
@@ -72,6 +77,7 @@ class PanelController extends Controller
             'data' => [
                 'title' => $question->title,
                 'content' => $question->content,
+                'author_id' => $question->user->id,
                 'author' => $question->user->username,
                 'date' => $question->created_at->format('d-m-Y H:i')
             ]

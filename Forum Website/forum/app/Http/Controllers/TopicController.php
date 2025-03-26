@@ -14,7 +14,12 @@ class TopicController extends Controller
             return redirect()->route('auth')->with('error', 'Soru sormak için giriş yapmalısınız.');
         }
 
-        return view('topics');
+        $topics = Question::with(['user', 'category'])
+            ->where('is_approved', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+            
+        return view('topics', compact('topics'));
     }
 
     public function store(Request $request)
@@ -53,7 +58,7 @@ class TopicController extends Controller
     public function index()
     {
         $topics = Question::with(['user', 'category'])
-            ->where('is_approved', true) // Sadece onaylı soruları göster
+            ->where('is_approved', true)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
             
