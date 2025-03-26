@@ -35,23 +35,18 @@ class Question extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function replies(): HasMany
+    public function replies(): HasMany 
     {
         return $this->hasMany(Reply::class);
     }
 
-    public function votes(): HasMany
+    public function upvotes(): HasMany
     {
-        return $this->hasMany(Vote::class);
+        return $this->hasMany(Vote::class)->where('is_upvote', true);
     }
 
-    public function upvotes()
+    public function downvotes(): HasMany
     {
-        return $this->votes()->where('is_upvote', true);
-    }
-
-    public function downvotes()
-    {
-        return $this->votes()->where('is_downvote', true);
+        return $this->hasMany(Vote::class)->where('is_downvote', true);
     }
 }

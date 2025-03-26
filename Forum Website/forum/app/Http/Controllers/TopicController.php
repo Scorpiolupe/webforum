@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,12 @@ class TopicController extends Controller
             return redirect()->route('auth')->with('error', 'Soru sormak için giriş yapmalısınız.');
         }
 
-        return view('topics');
+        $topics = Question::with(['user', 'category'])
+        ->where('is_approved', true) // Sadece onaylı soruları göster
+        ->orderBy('created_at', 'desc')
+        ->paginate(15);
+        
+    return view('topics', compact('topics'));
     }
 
     public function store(Request $request)
@@ -74,5 +80,30 @@ class TopicController extends Controller
         $question->increment('answer_count');
 
         return redirect()->back()->with('success', 'Yanıtınız başarıyla eklendi.');
+    }
+
+    public function edit(Question $question){
+        if (Auth::id() != $question->user_id) {
+            return redirect()->route('topics.show', $question->id)->with('error', 'Bu konuyu düzenleme yetkiniz yok.');
+        }
+
+        $categories = Category::all();
+        return view('topics.edit', compact('question', 'categories'));
+    }
+
+    public function update(Request $request, Question $question){
+        if (auth::id()!=$question->user_id) {
+            return redirect()->route('topics.show', $question->id)->with('error','Bu konuyu düzenleme yetkiniz yok.');
+
+        }
+        $validated=$request->validate([
+            'title'=>'required|string|max:255',
+            'content'=>'required|string',
+            'category_id'=>'required|exists:categories,id'
+        ]);
+
+        $question->update($validated);
+        return redirect()->route('topics.show', $question->id)->with('success','Konu başarılı bir şekilde güncellendi.');
+        
     }
 }
