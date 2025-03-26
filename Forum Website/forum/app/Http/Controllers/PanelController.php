@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PanelController extends Controller
 {
     public function index()
     {   
+        if(!Auth::check() || Auth::user()->is_admin == false) {
+            return redirect()->route('home')->with('error', 'Bu sayfaya erişmek için gerekli yetkiye sahip değilsin.');
+        }
         
         $activeUsers = DB::table('sessions')
             ->where('last_activity', '>=', now()->subMinutes(30)->timestamp)

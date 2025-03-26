@@ -13,7 +13,7 @@ Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/topics', [TopicController::class, 'index'])->name('topics');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 
-Route::get('/panel', [PanelController::class, 'index'])->name('panel')->middleware('auth');
+Route::get('/panel', [PanelController::class, 'index'])->name('panel');
 Route::get('/panel/question-detail', [PanelController::class, 'questionDetail'])->name('panel.questionDetail');
 
 Route::middleware(['auth'])->group(function () {
