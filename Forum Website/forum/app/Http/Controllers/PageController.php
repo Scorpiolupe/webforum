@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Question;
+use App\Models\Topic;
 use App\Models\User;
 
 
@@ -13,15 +14,15 @@ class PageController extends Controller
     
     public function index()
     {
-        $topics=Question::with(['user', 'category'])
+        $topics=Topic::with(['user', 'category'])
         ->where('is_approved', true)
         ->orderBy('created_at', 'desc')
         ->take(5)
         ->get();
 
-        $totalTopics=Question::where('is_approved', true)->count();
+        $totalTopics=Topic::where('is_approved', true)->count();
         $totalUsers=User::count();
-        $totalPosts=Question::where('is_approved', true)->sum('answer_count');
+        $totalPosts=Topic::where('is_approved', true)->sum('answer_count');
 
         return view('home', compact(
             'topics',

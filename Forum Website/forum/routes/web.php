@@ -6,23 +6,38 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\PanelController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/topics', [TopicController::class, 'index'])->name('topics');
-Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
 Route::get('/panel', [PanelController::class, 'index'])->name('panel');
 Route::get('/panel/question-detail', [PanelController::class, 'questionDetail'])->name('panel.questionDetail');
 
 Route::post('/panel/approve-question', [PanelController::class, 'approveQuestion'])->name('panel.approve');
 Route::post('/panel/reject-question', [PanelController::class, 'rejectQuestion'])->name('panel.reject');
+Route::get('/panel/user-detail', [PanelController::class, 'userDetail'])->name('panel.userDetail');
+Route::post('/panel/user-ban', [PanelController::class, 'banUser'])->name('panel.banUser');
+Route::post('/panel/user-unban', [PanelController::class, 'unbanUser'])->name('panel.unbanUser');
+Route::post('/panel/user-make-admin', [PanelController::class, 'makeAdmin'])->name('panel.makeAdmin');
+Route::post('/panel/user-remove-admin', [PanelController::class, 'removeAdmin'])->name('panel.removeAdmin');
+Route::post('/panel/user-delete', [PanelController::class, 'deleteUser'])->name('panel.deleteUser');
+Route::get('/panel/contact-detail', [PanelController::class, 'contactDetail'])->name('panel.contactDetail');
+Route::post('/panel/contact-delete', [PanelController::class, 'contactDelete'])->name('panel.contactDelete');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/questions/{questionId}/upvote', [VoteController::class, 'upvote'])->name('questions.upvote');
     Route::post('/questions/{questionId}/downvote', [VoteController::class, 'downvote'])->name('questions.downvote');
 });
+
+
+// Profile
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 
 // Auth routes
 Route::get('/auth', [AuthController::class, 'showLoginForm'])->name('auth');

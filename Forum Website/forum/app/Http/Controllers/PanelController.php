@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use App\Models\Question;
+use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,15 +25,21 @@ class PanelController extends Controller
             ->where('last_activity', '>=', now()->subMinutes(30)->timestamp)
             ->distinct('user_id')
             ->count();
-        $totalQuestions = Question::where('is_approved', true)->count();
-        $pendingQuestions = Question::where('is_approved', false)->count();
-        $totalAnswers = Question::where('answer_count', '>', 0)
+        $totalQuestions = Topic::where('is_approved', true)->count();
+        $pendingQuestions = Topic::where('is_approved', false)->count();
+        $totalAnswers = Topic::where('answer_count', '>', 0)
             ->where('is_approved', true)
             ->count();
 
        
-        $pendingQuestionsList = Question::where('is_approved', false)
+        $pendingQuestionsList = Topic::where('is_approved', false)
             ->with('user', 'category')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        $contacts = DB::table('contacts')
+            ->where('is_resolved', false)
             ->latest()
             ->take(10)
             ->get();
@@ -47,13 +55,14 @@ class PanelController extends Controller
             'pendingQuestions',
             'totalAnswers',
             'pendingQuestionsList',
-            'recentActivities'
+            'recentActivities',
+            'contacts'
         ));
     }
 
     public function approveQuestion(Request $request)
     {
-        $question = Question::findOrFail($request->id);
+        $question = Topic::findOrFail($request->id);
         $question->is_approved = true;
         $question->save();
 
@@ -62,7 +71,7 @@ class PanelController extends Controller
     
     public function rejectQuestion(Request $request)
     {
-        $question = Question::findOrFail($request->id);
+        $question = Topic::findOrFail($request->id);
         $question->delete();
         
         return response()->json(['success' => true]);
@@ -70,7 +79,7 @@ class PanelController extends Controller
 
     public function questionDetail(Request $request)
     {
-        $question = Question::with('user')->findOrFail($request->id);
+        $question = Topic::with('user')->findOrFail($request->id);
 
         return response()->json([
             'success' => true,
@@ -83,4 +92,88 @@ class PanelController extends Controller
             ]
         ]);
     }
+
+    public function userDetail(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'created_at' => $user->created_at->format('d-m-Y H:i')
+            ]
+        ]);
+    }
+
+    public function banUser(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $user->is_banned = true; // tabloya eklenecek
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function unbanUser(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $user->is_banned = false; // tabloya eklenecek
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $user->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function makeAdmin(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $user->is_admin = true; // tabloya eklenecek
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function removeAdmin(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $user->is_admin = false; // tabloya eklenecek
+        $user->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function contactDetail(Request $request)
+    {
+        $contact = DB::table('contacts')->where('id', $request->id)->first();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'name' => $contact->name,
+                'email' => $contact->email,
+                'message' => $contact->message,
+                'date' => $contact->created_at
+            ]
+        ]);
+    }
+
+    public function contactDelete(Request $request)
+    {
+        $contact = Contact::findOrFail($request->id);
+        $contact->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+
 }

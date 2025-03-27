@@ -9,7 +9,7 @@ class Vote extends Model
 {
     protected $fillable = [
         'user_id',
-        'question_id',
+        'topic_id',
         'is_upvote',
         'is_downvote'
     ];
@@ -26,6 +26,6 @@ class Vote extends Model
 
     public function question(): BelongsTo
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(Topic::class);
     }
 }

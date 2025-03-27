@@ -20,6 +20,16 @@ class CategorySeeder extends Seeder
             ['name' => 'Eğitim'],
             ['name' => 'Sağlık'],
             ['name' => 'Spor'],
+            ['name' => 'Oyun'],
+            ['name' => 'Bilim'],
+            ['name' => 'Sanat'],
+            ['name' => 'Müzik'],
+            ['name' => 'Sinema'],
+            ['name' => 'Edebiyat'],
+            ['name' => 'Seyahat'],
+            ['name' => 'Yemek'],
+            ['name' => 'Hobi'],
+            ['name' => 'İş Dünyası'],
             ['name' => 'Diğer'],
         ];
 

@@ -5,28 +5,36 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
+        <div class="card text-white">
             <div class="card-header">
                 <h3 class="mb-0"><i class="fas fa-envelope"></i> Bizimle İletişime Geçin</h3>
             </div>
             <div class="card-body">
-                @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
                 <form action="{{ route('contact.send') }}" method="POST">
                     @csrf
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Ad Soyad</label>
-                        <input type="text" class="form-control bg-dark text-light" id="name" name="name" required>
-                    </div>
+                    @if (Auth::check())
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Ad Soyad</label>
+                            <input type="hidden" name="name" value="{{ Auth::user()->username }}">
+                            <input type="text" value="{{ Auth::user()->username }}" disabled class="form-control bg-dark text-light" id="name">
+                        </div>
+                    
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta Adresi</label>
+                            <input type="hidden" name="email" value="{{ Auth::user()->email }}">
+                            <input type="email" value="{{ Auth::user()->email }}" disabled class="form-control bg-dark text-light" id="email">
+                        </div>
+                    @else
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Ad Soyad</label>
+                            <input type="text" class="form-control bg-dark text-light" id="name" name="name" required>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label">E-posta Adresi</label>
-                        <input type="email" class="form-control bg-dark text-light" id="email" name="email" required>
-                    </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta Adresi</label>
+                            <input type="email" class="form-control bg-dark text-light" id="email" name="email" required>
+                        </div>
+                    @endif
 
                     <div class="mb-3">
                         <label for="subject" class="form-label">Konu</label>
@@ -45,7 +53,7 @@
             </div>
         </div>
 
-        <div class="card mt-4">
+        <div class="card mt-4 text-white">
             <div class="card-body">
                 <h4><i class="fas fa-map-marker-alt"></i> Adres</h4>
                 <p>İstanbul, Türkiye</p>

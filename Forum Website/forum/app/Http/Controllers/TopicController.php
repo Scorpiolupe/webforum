@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Question;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,7 @@ class TopicController extends Controller
             return redirect()->route('auth')->with('error', 'Soru sormak için giriş yapmalısınız.');
         }
 
-        $topics = Question::with(['user', 'category'])
+        $topics = Topic::with(['user', 'category'])
             ->where('is_approved', true)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
@@ -35,7 +36,7 @@ class TopicController extends Controller
             'category_id' => 'required|exists:categories,id'
         ]);
 
-        $question = Question::create([
+        $question = Topic::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
             'category_id' => $validated['category_id'],
@@ -47,7 +48,7 @@ class TopicController extends Controller
             ->with('success', 'Sorunuz başarıyla oluşturuldu ve onay için gönderildi.');
     }
 
-    public function show(Question $question)
+    public function show(Topic $question)
     {
         $question->increment('view_count');
         
@@ -58,7 +59,7 @@ class TopicController extends Controller
 
     public function index()
     {
-        $topics = Question::with(['user', 'category'])
+        $topics = Topic::with(['user', 'category'])
             ->where('is_approved', true)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
@@ -66,7 +67,7 @@ class TopicController extends Controller
         return view('topics', compact('topics'));
     }
 
-    public function reply(Request $request, Question $question)
+    public function reply(Request $request, Topic $question)
     {
         $validated = $request->validate([
             'content' => 'required|min:5'
@@ -82,7 +83,7 @@ class TopicController extends Controller
         return redirect()->back()->with('success', 'Yanıtınız başarıyla eklendi.');
     }
     
-    public function edit(Question $question){
+    public function edit(Topic $question){
         if (Auth::id() != $question->user_id) {
             return redirect()->route('topics.show', $question->id)->with('error', 'Bu konuyu düzenleme yetkiniz yok.');
         }
@@ -91,7 +92,7 @@ class TopicController extends Controller
         return view('topics.edit', compact('question', 'categories'));
     }
 
-    public function update(Request $request, Question $question){
+    public function update(Request $request, Topic $question){
         if (auth::id()!=$question->user_id) {
             return redirect()->route('topics.show', $question->id)->with('error','Bu konuyu düzenleme yetkiniz yok.');
 

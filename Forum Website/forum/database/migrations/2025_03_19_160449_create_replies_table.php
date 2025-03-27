@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('question_id')->constrained()->onDelete('no action');
+            $table->foreignId('topic_id')->constrained()->onDelete('no action');
             $table->foreignId('user_id')->constrained()->onDelete('no action');
             $table->text('content');
             $table->boolean('is_solution')->default(false);

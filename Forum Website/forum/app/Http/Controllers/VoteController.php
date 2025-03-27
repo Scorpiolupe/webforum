@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\Topic;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,7 @@ class VoteController extends Controller
     public function upvote($questionId)
     {
         $user = Auth::user();
-        $question = Question::findOrFail($questionId);
+        $question = Topic::findOrFail($questionId);
 
         if($question->downvotes()->where('user_id', $user->id)->exists()) {
             $question->downvotes()->where('user_id', $user->id)->delete();
@@ -36,7 +37,7 @@ class VoteController extends Controller
     public function downvote($questionId)
     {
         $user = Auth::user();
-        $question = Question::findOrFail($questionId);
+        $question = Topic::findOrFail($questionId);
 
         if ($question->upvotes()->where('user_id', $user->id)->exists()) {
             $question->upvotes()->where('user_id', $user->id)->delete();

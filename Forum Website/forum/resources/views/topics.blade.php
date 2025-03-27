@@ -132,7 +132,7 @@
                         {{ $topics->links() }}
                     </div>
                 @else
-                    <div class="text-center">
+                    <div class="text-center text-light">
                         <p>Henüz konu bulunmamaktadır.</p>
                     </div>
                 @endif

@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('question_id')->constrained()->onDelete('NO ACTION');
+            $table->foreignId('topic_id')->constrained()->onDelete('NO ACTION');
             $table->boolean('is_upvote')->default(false);
             $table->boolean('is_downvote')->default(false);
             $table->string('created_at');
             $table->string('updated_at');
 
-            $table->unique(['user_id', 'question_id']);
+            $table->unique(['user_id', 'topic_id']);
         });
     }
 

@@ -18,8 +18,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_admin')->default(false);
+            $table->boolean('is_banned')->default(false);
             $table->string('avatar')->nullable();
             $table->string('bio')->nullable();
+            $table->dateTimeTz('created_at');
+            $table->dateTimeTz('updated_at');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

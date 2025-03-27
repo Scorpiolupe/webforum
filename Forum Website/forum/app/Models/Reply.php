@@ -16,9 +16,9 @@ class Reply extends Model
         'downvotes'
     ];
 
-    public function question(): BelongsTo
+    public function topic(): BelongsTo
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(Topic::class);
     }
 
     public function user(): BelongsTo
