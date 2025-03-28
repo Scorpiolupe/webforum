@@ -27,19 +27,7 @@
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-between">
-                @if (Auth::user()->is_admin)
-                    <form action="{{ route('topics.lock', $topic->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger btn-sm">
-                            @if($topic->is_locked)
-                                <i class="fas fa-unlock"></i> Kilidi Aç
-                            @elseif(!$topic->is_locked)
-                                <i class="fas fa-lock"></i> Kilitle
-                            @endif
-                        </button>
-                    </form>
-                @endif
-                @if (Auth::id()==$topic->user_id || Auth::user()->is_admin)
+                @if (Auth::id()==$topic->user_id)
                     <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i> Düzenle
                     </a>
@@ -71,28 +59,31 @@
             </div>
         @endif
 
-        @auth
-            @if($topic->is_locked)
-                <div class="alert alert-danger mt-4">
-                    Bu konu kilitli olduğu için yanıt veremezsiniz.
+        @if(!Auth::check())
+            <div class="alert alert-warning mt-4">
+                Yanıt verebilmek için giriş yapmalısınız.
+            </div>
+        @elseif($topic->is_locked)
+            <div class="alert alert-danger mt-4">
+                Bu konu kilitli olduğu için yanıt veremezsiniz.
+            </div>
+        @elseif(Auth::check())
+            <div class="card bg-dark mt-4">
+                <div class="card-header">
+                    <h4 class="text-light mb-0">Yanıt Yaz</h4>
                 </div>
-            @else
-                <div class="card bg-dark mt-4">
-                    <div class="card-header">
-                        <h4 class="text-light mb-0">Yanıt Yaz</h4>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('topics.reply', $topic->id) }}" method="POST">
-                            @csrf
-                            <div class="mb-3">
-                                <textarea class="form-control bg-dark text-light" name="content" rows="3" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Yanıtla</button>
-                        </form>
-                    </div>
+                <div class="card-body">
+                    <form action="{{ route('topics.reply', $topic->id) }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <textarea class="form-control bg-dark text-light" name="content" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Yanıtla</button>
+                    </form>
                 </div>
-            @endif
-        @endauth
+            </div>
+        @endif
+
     </div>
 </div>
 @endsection

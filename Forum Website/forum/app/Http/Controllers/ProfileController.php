@@ -11,6 +11,8 @@ class ProfileController extends Controller
 {
     public function index($userId)
     {
+        
+
         $user = User::findOrFail($userId);
         
         $topics = Topic::where('user_id', $userId)

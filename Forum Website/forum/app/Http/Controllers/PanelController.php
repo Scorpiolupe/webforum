@@ -38,6 +38,12 @@ class PanelController extends Controller
             ->take(10)
             ->get();
 
+        $questionsList = Topic::where('is_approved', true)
+            ->with('user', 'category')
+            ->latest()
+            ->take(10)
+            ->get();
+
         $contacts = DB::table('contacts')
             ->where('is_resolved', false)
             ->latest()
@@ -55,6 +61,7 @@ class PanelController extends Controller
             'pendingQuestions',
             'totalAnswers',
             'pendingQuestionsList',
+            'questionsList',
             'recentActivities',
             'contacts'
         ));
@@ -74,6 +81,32 @@ class PanelController extends Controller
         $question = Topic::findOrFail($request->id);
         $question->delete();
         
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteQuestion(Request $request)
+    {
+        $question = Topic::findOrFail($request->id);
+        $question->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function lockQuestion(Request $request)
+    {
+        $question = Topic::findOrFail($request->id);
+        $question->is_locked = true;
+        $question->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function unlockQuestion(Request $request)
+    {
+        $question = Topic::findOrFail($request->id);
+        $question->is_locked = false;
+        $question->save();
+
         return response()->json(['success' => true]);
     }
 

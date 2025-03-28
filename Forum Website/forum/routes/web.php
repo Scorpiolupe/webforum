@@ -21,6 +21,9 @@ Route::get('/panel/question-detail', [PanelController::class, 'questionDetail'])
 
 Route::post('/panel/approve-question', [PanelController::class, 'approveQuestion'])->name('panel.approve');
 Route::post('/panel/reject-question', [PanelController::class, 'rejectQuestion'])->name('panel.reject');
+Route::post('/panel/delete-question', [PanelController::class, 'deleteQuestion'])->name('panel.deleteQuestion');
+Route::post('/panel/lock-question', [PanelController::class, 'lockQuestion'])->name('panel.lockQuestion');
+Route::post('/panel/unlock-question', [PanelController::class, 'unlockQuestion'])->name('panel.unlockQuestion');
 Route::get('/panel/user-detail', [PanelController::class, 'userDetail'])->name('panel.userDetail');
 Route::post('/panel/user-ban', [PanelController::class, 'banUser'])->name('panel.banUser');
 Route::post('/panel/user-unban', [PanelController::class, 'unbanUser'])->name('panel.unbanUser');
@@ -48,8 +51,6 @@ Route::post('/topics', [TopicController::class, 'store'])->name('topics.store');
 Route::get('/topics/create', [TopicController::class, 'create'])->name('topics.create');
 Route::get('/topics/{question}', [TopicController::class, 'show'])->name('topics.show');
 Route::get('/topics/{question}/edit', [TopicController::class, 'edit'])->name('topics.edit');
-
-Route::post('/topics/{question}/lock', [TopicController::class, 'lock'])->name('topics.lock');
 
 Route::put('/topics/{question}', [TopicController::class, 'update'])->name('topics.update');
 Route::post('/topics/{question}/reply', [TopicController::class, 'reply'])->name('topics.reply')->middleware('auth');

@@ -21,8 +21,8 @@ return new class extends Migration
             $table->timestamp('resolved_at')->nullable();
             $table->text('response')->nullable();
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->dateTimeTz('created_at')->useCurrent();
-            $table->dateTimeTz('updated_at')->useCurrentOnUpdate();
+            $table->dateTimeTz('created_at');
+            $table->dateTimeTz('updated_at');
         });
     }
 

@@ -329,6 +329,14 @@
                                     <i class="fas fa-user me-2"></i> Profil
                                 </a>
                             </li>
+                            @if(Auth::user()->is_admin)
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                    <a href="/panel" class="dropdown-item">
+                                        <i class="fas fa-cogs me-2"></i> Yönetim Paneli
+                                    </a>
+                            @endif
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

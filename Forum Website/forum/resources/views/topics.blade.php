@@ -57,9 +57,9 @@
                             <label for="category_id" class="form-label">Kategori</label>
                             <select class="form-select @error('category_id') is-invalid @enderror" 
                                     id="category_id" name="category_id" required>
-                                <option value="">Kategori Seçin</option>
+                                <option value="" class="bg-dark text-light">Kategori Seçin</option>
                                 @foreach($categories ?? [] as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" class="bg-dark text-light">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                             @error('category_id')
@@ -164,6 +164,9 @@
     color: var(--text-color);
     box-shadow: 0 0 0 0.25rem rgba(107, 70, 193, 0.25);
 }
+
+
+
 .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
