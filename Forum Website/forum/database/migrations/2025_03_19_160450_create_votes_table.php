@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('topic_id')->constrained()->onDelete('NO ACTION');
             $table->boolean('is_upvote')->default(false);
             $table->boolean('is_downvote')->default(false);
-            $table->string('created_at');
-            $table->string('updated_at');
+            $table->dateTimeTz('created_at');
+            $table->dateTimeTz('updated_at');
 
             $table->unique(['user_id', 'topic_id']);
         });

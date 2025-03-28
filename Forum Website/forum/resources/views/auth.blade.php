@@ -7,6 +7,9 @@
     <div class="col-md-6">
         <div class="card login-card mb-4">
             <div class="card-body p-4 bg-dark text-light">
+                <div class="text-center mb-4">
+                    <img src="{{ asset('logo/logo.png') }}" alt="Forum Logo" height="160" class="auth-logo">
+                </div>
                 <ul class="nav nav-tabs mb-4" id="authTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">
@@ -156,6 +159,14 @@ function togglePassword(inputId) {
 </script>
 
 <style>
+.auth-logo {
+    transition: transform 0.3s ease;
+}
+
+.auth-logo:hover {
+    transform: scale(1.05);
+}
+
 .nav-tabs {
     border-bottom: 1px solid var(--primary-color);
 }

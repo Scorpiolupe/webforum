@@ -49,4 +49,9 @@ class Topic extends Model
     {
         return $this->hasMany(Vote::class)->where('is_downvote', true);
     }
+    
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
 }

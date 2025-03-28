@@ -84,7 +84,7 @@ class TopicController extends Controller
     }
     
     public function edit(Topic $question){
-        if (Auth::id() != $question->user_id) {
+        if (Auth::id() != $question->user_id && !Auth::user()->is_admin) {
             return redirect()->route('topics.show', $question->id)->with('error', 'Bu konuyu düzenleme yetkiniz yok.');
         }
 
@@ -93,7 +93,7 @@ class TopicController extends Controller
     }
 
     public function update(Request $request, Topic $question){
-        if (auth::id()!=$question->user_id) {
+        if (auth::id()!=$question->user_id && !Auth::user()->is_admin) {
             return redirect()->route('topics.show', $question->id)->with('error','Bu konuyu düzenleme yetkiniz yok.');
 
         }
@@ -105,6 +105,27 @@ class TopicController extends Controller
 
         $question->update($validated);
         return redirect()->route('topics.show', $question->id)->with('success','Konu başarılı bir şekilde güncellendi.');
+        
+    }
+
+    public function lock(Topic $question)
+    {
+        if (!Auth::user()->is_admin) {
+            return redirect()->route('topics.show', $question->id)->with('error', 'Bu konuyu kilitleme yetkiniz yok.');
+        }
+        elseif ($question->is_locked) {
+            $question->update(['is_locked' => false]);
+
+            return redirect()->route('topics.show', $question->id)->with('success', 'Konunun kilidi başarıyla açıldı.');
+        }
+        elseif(!$question->is_locked){
+            $question->update(['is_locked' => true]);
+
+            return redirect()->route('topics.show', $question->id)->with('success', 'Konu başarıyla kilitlendi.');
+        }
+        else{
+            return redirect()->route('topics.show', $question->id)->with('error', 'Bir hata oluştu.');
+        }
         
     }
 }

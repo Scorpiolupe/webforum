@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Question;
 use App\Models\Topic;
 use App\Models\Vote;
 use Illuminate\Http\Request;
@@ -10,22 +9,36 @@ use Illuminate\Support\Facades\Auth;
 
 class VoteController extends Controller
 {
-    public function upvote($questionId)
+    public function upvote($topicId)
     {
         $user = Auth::user();
-        $question = Topic::findOrFail($questionId);
+        $topic = Topic::findOrFail($topicId);
 
-        if($question->downvotes()->where('user_id', $user->id)->exists()) {
-            $question->downvotes()->where('user_id', $user->id)->delete();
-        }
+        // Önce mevcut downvote'u sil
+        Vote::where('user_id', $user->id)
+            ->where('topic_id', $topic->id)
+            ->where('is_downvote', true)
+            ->delete();
 
-        $vote = Vote::updateOrCreate(
-            ['user_id' => $user->id, 'question_id' => $question->id],
-            ['is_upvote' => true]
+        // Upvote ekle veya güncelle
+        Vote::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'topic_id' => $topic->id
+            ],
+            [
+                'is_upvote' => true,
+                'is_downvote' => false
+            ]
         );
 
-        $upvotes = $question->upvotes()->count();
-        $downvotes = $question->downvotes()->count();
+        $upvotes = Vote::where('topic_id', $topic->id)->where('is_upvote', true)->count();
+        $downvotes = Vote::where('topic_id', $topic->id)->where('is_downvote', true)->count();
+
+        Topic::where('id', $topic->id)->update([
+            'upvotes' => $upvotes,
+            'downvotes' => $downvotes,
+        ]);
 
         return response()->json([
             'success' => true,
@@ -34,22 +47,36 @@ class VoteController extends Controller
         ]);
     }
 
-    public function downvote($questionId)
+    public function downvote($topicId)
     {
         $user = Auth::user();
-        $question = Topic::findOrFail($questionId);
+        $topic = Topic::findOrFail($topicId);
 
-        if ($question->upvotes()->where('user_id', $user->id)->exists()) {
-            $question->upvotes()->where('user_id', $user->id)->delete();
-        }
+        // Önce mevcut upvote'u sil
+        Vote::where('user_id', $user->id)
+            ->where('topic_id', $topic->id)
+            ->where('is_upvote', true)
+            ->delete();
 
-        $vote = Vote::updateOrCreate(
-            ['user_id' => $user->id, 'question_id' => $question->id],
-            ['is_downvote' => true]
+        // Downvote ekle veya güncelle
+        Vote::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'topic_id' => $topic->id
+            ],
+            [
+                'is_upvote' => false,
+                'is_downvote' => true
+            ]
         );
 
-        $upvotes = $question->upvotes()->count();
-        $downvotes = $question->downvotes()->count();
+        $upvotes = Vote::where('topic_id', $topic->id)->where('is_upvote', true)->count();
+        $downvotes = Vote::where('topic_id', $topic->id)->where('is_downvote', true)->count();
+
+        Topic::where('id', $topic->id)->update([
+            'upvotes' => $upvotes,
+            'downvotes' => $downvotes,
+        ]);
 
         return response()->json([
             'success' => true,

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +22,7 @@
             --gray-700: #374151;
             --gray-800: #1f2937;
             --gray-900: #111827;
-            
+
             /* Main theme colors */
             --primary: #6b7280;
             --primary-hover: #4b5563;
@@ -37,7 +38,11 @@
         }
 
         body {
-            background-color: var(--dark-bg);
+            background-image: linear-gradient(rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0.9)), url('{{ asset("logo/comu-bg.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             color: var(--text-color);
             font-family: system-ui, -apple-system, sans-serif;
             line-height: 1.5;
@@ -86,7 +91,7 @@
         }
 
         .card-header {
-            background-color: rgba(0,0,0,0.1);
+            background-color: rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid var(--border-color);
             padding: 0.75rem 1rem;
         }
@@ -135,14 +140,16 @@
         }
 
         /* Form elements */
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             background-color: var(--dark-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             background-color: var(--dark-bg);
             border-color: var(--gray-500);
             box-shadow: 0 0 0 0.2rem rgba(107, 114, 128, 0.25);
@@ -213,16 +220,22 @@
 
         /* Simple animations */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideDown {
-            from { 
+            from {
                 opacity: 0;
                 transform: translateY(-10px);
             }
-            to { 
+
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -263,11 +276,14 @@
     </style>
     @stack('styles')
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="/"><i class="fas fa-comments me-2"></i>Forum</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand" href="/">
+                <img src="{{ asset('logo/logo.png') }}" alt="Forum Logo" height="30" class="d-inline-block align-text-top me-2">
+                ÇOMÜ Forum
+            </a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -281,16 +297,16 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if(isset($categories) && count($categories) > 0)
-                                @foreach($categories as $category)
-                                    <li>
-                                        <a class="dropdown-item" href="/categories/{{ $category->id }}">
-                                            {{ $category->name }}
-                                            <span class="badge bg-primary float-end">{{ $category->questions()->count() }}</span>
-                                        </a>
-                                    </li>
-                                @endforeach
+                            @foreach($categories as $category)
+                            <li>
+                                <a class="dropdown-item" href="/categories/{{ $category->id }}">
+                                    {{ $category->name }}
+                                    <span class="badge bg-primary float-end">{{ $category->questions()->count() }}</span>
+                                </a>
+                            </li>
+                            @endforeach
                             @else
-                                <li><a class="dropdown-item">Henüz kategori bulunmamaktadır.</a></li>
+                            <li><a class="dropdown-item">Henüz kategori bulunmamaktadır.</a></li>
                             @endif
                         </ul>
                     </li>
@@ -303,31 +319,33 @@
                 </ul>
                 <ul class="navbar-nav">
                     @auth
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-1"></i> {{ Auth::user()->username }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="/profile">
-                                        <i class="fas fa-user me-2"></i> Profil
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form action="/logout" method="POST" class="d-inline">
-                                        @csrf
-                                        <button class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i> {{ Auth::user()->username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="/profile/{{ Auth::user()->id }}">
+                                    <i class="fas fa-user me-2"></i> Profil
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form action="/logout" method="POST" class="d-inline">
+                                    @csrf
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
                     @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="/auth"><i class="fas fa-sign-in-alt me-1"></i> Giriş Yap</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth"><i class="fas fa-sign-in-alt me-1"></i> Giriş Yap</a>
+                    </li>
                     @endauth
                 </ul>
             </div>
@@ -335,17 +353,17 @@
     </nav>
 
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show container" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    <div class="alert alert-danger alert-dismissible fade show container" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     @endif
 
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show container" role="alert">
-            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    <div class="alert alert-success alert-dismissible fade show container" role="alert">
+        <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     @endif
 
     <main class="container">
@@ -364,10 +382,10 @@
         // Initialize tooltips
         document.addEventListener('DOMContentLoaded', function() {
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl)
             });
-            
+
             // Add active class to current nav item
             const currentLocation = location.pathname;
             const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
@@ -381,4 +399,5 @@
     </script>
     @stack('scripts')
 </body>
+
 </html>

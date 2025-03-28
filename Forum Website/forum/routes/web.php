@@ -31,13 +31,12 @@ Route::get('/panel/contact-detail', [PanelController::class, 'contactDetail'])->
 Route::post('/panel/contact-delete', [PanelController::class, 'contactDelete'])->name('panel.contactDelete');
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/questions/{questionId}/upvote', [VoteController::class, 'upvote'])->name('questions.upvote');
-    Route::post('/questions/{questionId}/downvote', [VoteController::class, 'downvote'])->name('questions.downvote');
+    Route::post('/topics/{topicId}/upvote', [VoteController::class, 'upvote'])->name('topics.upvote');
+    Route::post('/topics/{topicId}/downvote', [VoteController::class, 'downvote'])->name('topics.downvote');
 });
 
-
 // Profile
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+Route::get('/profile/{userId}', [ProfileController::class, 'index'])->name('profile');
 
 // Auth routes
 Route::get('/auth', [AuthController::class, 'showLoginForm'])->name('auth');
@@ -49,9 +48,10 @@ Route::post('/topics', [TopicController::class, 'store'])->name('topics.store');
 Route::get('/topics/create', [TopicController::class, 'create'])->name('topics.create');
 Route::get('/topics/{question}', [TopicController::class, 'show'])->name('topics.show');
 Route::get('/topics/{question}/edit', [TopicController::class, 'edit'])->name('topics.edit');
+
+Route::post('/topics/{question}/lock', [TopicController::class, 'lock'])->name('topics.lock');
+
 Route::put('/topics/{question}', [TopicController::class, 'update'])->name('topics.update');
 Route::post('/topics/{question}/reply', [TopicController::class, 'reply'])->name('topics.reply')->middleware('auth');
-Route::post('/questions/{question}/upvote', [VoteController::class, 'upvote'])->middleware('auth');
-Route::post('/questions/{question}/downvote', [VoteController::class, 'downvote'])->middleware('auth');
 
 Route::get('/categories', [CategoryController::class, 'index']);

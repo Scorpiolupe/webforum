@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Http\ViewComposers\CategoryComposer;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer(['layout', 'home', 'topics'], CategoryComposer::class);
+        // Share categories with all views
+        View::composer('*', CategoryComposer::class);
     }
 }

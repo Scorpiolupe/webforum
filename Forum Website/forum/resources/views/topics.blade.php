@@ -115,6 +115,11 @@
                                         </p>
                                     </div>
                                     <div class="d-flex align-items-center">
+                                        @if($topic->is_locked)
+                                            <span class="badge bg-danger me-2">Kilitli</span>
+                                        @else
+                                            <span class="badge bg-success m-2">Açık</span>
+                                        @endif
                                         <span class="badge bg-primary me-2">{{ $topic->view_count ?? 0 }} Görüntülenme</span></span>
                                         <button class="btn btn-outline-success btn-sm me-1 upvote-btn" data-id="{{ $topic->id }}">
                                             <i class="fas fa-arrow-up"></i> {{ $topic->upvotes()->count() }}
@@ -232,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.upvote-btn').forEach(button => {
         button.addEventListener('click', function() {
             const questionId = this.getAttribute('data-id');
-            axios.post('/questions/' + questionId + '/upvote')
+            axios.post('/topics/' + questionId + '/upvote')
                 .then(response => {
                     if (response.data.success) {
                         this.querySelector('i').nextSibling.textContent = ' ' + response.data.upvotes;
@@ -248,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.downvote-btn').forEach(button => {
         button.addEventListener('click', function() {
             const questionId = this.getAttribute('data-id');
-            axios.post('/questions/' + questionId + '/downvote')
+            axios.post('/topics/' + questionId + '/downvote')
                 .then(response => {
                     if (response.data.success) {
                         this.querySelector('i').nextSibling.textContent = ' ' + response.data.downvotes;

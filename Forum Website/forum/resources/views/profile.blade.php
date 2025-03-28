@@ -15,15 +15,15 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label text-light">Kullanıcı Adı</label>
-                    <p class="form-control bg-secondary text-light">{{ Auth::user()->username }}</p>
+                    <p class="form-control bg-secondary text-light">{{ $user->username }}</p>
                 </div>
                 <div class="mb-3">
                     <label class="form-label text-light">E-posta</label>
-                    <p class="form-control bg-secondary text-light">{{ Auth::user()->email }}</p>
+                    <p class="form-control bg-secondary text-light">{{ $user->email }}</p>
                 </div>
                 <div class="mb-3">
                     <label class="form-label text-light">Kayıt Tarihi</label>
-                    <p class="form-control bg-secondary text-light">{{ Auth::user()->created_at->format('d.m.Y') }}</p>
+                    <p class="form-control bg-secondary text-light">{{ $user->created_at->format('d.m.Y') }}</p>
                 </div>
             </div>
         </div>

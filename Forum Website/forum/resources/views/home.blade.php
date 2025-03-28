@@ -32,6 +32,11 @@
                                         </small>
                                     </div>
                                     <div>
+                                        @if($topic->is_locked)
+                                            <span class="badge bg-danger me-2">Kilitli</span>
+                                        @else
+                                            <span class="badge bg-success m-2">Açık</span>
+                                        @endif
                                         <span class="badge bg-primary">{{ $topic->view_count ?? 0 }} <i class="fas fa-eye"></i></span>
                                     </div>
                                 </div>
