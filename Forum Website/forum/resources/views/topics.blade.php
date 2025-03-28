@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-12">
         <!-- Arama ve Filtreleme Bölümü -->
-        <div class="card mb-4">
+        <div class="card mb-4 bg-dark text-light">
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <select id="categoryFilter" class="form-select">
+                        <select id="categoryFilter" class="form-select bg-dark text-light border-primary">
                             <option value="">Tüm Kategoriler</option>
                             @foreach($categories ?? [] as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -84,8 +84,8 @@
             </div>
         @endauth
 
-        <div class="card">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <div class="card bg-dark text-light">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0"><i class="fas fa-newspaper"></i> Konular</h4>
                 @auth
                     <button class="btn btn-light btn-sm" data-bs-toggle="collapse" data-bs-target="#newTopicCard">
@@ -97,7 +97,7 @@
                 @if(isset($topics) && count($topics) > 0)
                     @foreach($topics as $topic)
                         <div class="card mb-3 topic-card" data-category-id="{{ $topic->category_id ?? '' }}">
-                            <div class="card-body">
+                            <div class="card-body bg-dark text-light">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <h5 class="card-title">

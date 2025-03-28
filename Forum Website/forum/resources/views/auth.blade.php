@@ -6,7 +6,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card login-card mb-4">
-            <div class="card-body p-4">
+            <div class="card-body p-4 bg-dark text-light">
                 <ul class="nav nav-tabs mb-4" id="authTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">
@@ -162,19 +162,26 @@ function togglePassword(inputId) {
 
 .nav-tabs .nav-link {
     color: var(--text-color);
-    border: none;
-    padding: 10px 20px;
+    border: 1px solid transparent;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .nav-tabs .nav-link.active {
-    color: var(--primary-color);
-    background-color: transparent;
-    border-bottom: 2px solid var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
 }
 
 .nav-tabs .nav-link:hover {
-    border-color: transparent;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-color);
 }
+
+
 
 .input-group-text {
     background-color: var(--secondary-bg);

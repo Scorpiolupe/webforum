@@ -1,84 +1,102 @@
 @extends('layout')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <!-- Kenar Çubuğu -->
-        <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar py-3">
-            <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#dashboard">
-                            <i class="fas fa-tachometer-alt me-2"></i>Kontrol Paneli
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#pending-questions">
-                            <i class="fas fa-question-circle me-2"></i>Bekleyen Sorular
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#users">
-                            <i class="fas fa-users me-2"></i>Kullanıcılar
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#reports">
-                            <i class="fas fa-flag me-2"></i>Raporlar
-                        </a>
-                    </li>
-                </ul>
+<!-- Panel Header -->
+<div class="bg-dark text-white py-3 px-4 mb-4">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Admin Paneli</h4>
+            <div>
+                <button class="btn btn-outline-light btn-sm me-2">
+                    <i class="fas fa-bell me-1"></i>
+                    <span class="badge bg-danger">3</span>
+                </button>
+                <button class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Ana İçerik -->
-        <div class="col-md-9 col-lg-10 ms-sm-auto px-4 py-3">
-            <!-- İstatistik Kartları -->
-            <div class="row g-3 mb-4">
-                <div class="col-md-3">
-                    <div class="card text-white bg-primary">
-                        <div class="card-body">
-                            <h5 class="card-title">Aktif Kullanıcılar</h5>
-                            <h2 class="card-text">{{ $activeUsers ?? 0 }}</h2>
+<div class="container-fluid px-4">
+    <!-- İstatistik Kartları -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 bg-dark text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle p-3" style="background: rgba(52, 152, 219, 0.2)">
+                            <i class="fas fa-users fa-2x text-info"></i>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-success">
-                        <div class="card-body">
-                            <h5 class="card-title">Toplam Soru</h5>
-                            <h2 class="card-text">{{ $totalQuestions ?? 0 }}</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-warning">
-                        <div class="card-body">
-                            <h5 class="card-title">Bekleyen Sorular</h5>
-                            <h2 class="card-text">{{ $pendingQuestions ?? 0 }}</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-info">
-                        <div class="card-body">
-                            <h5 class="card-title">Toplam Cevap</h5>
-                            <h2 class="card-text">{{ $totalAnswers ?? 0 }}</h5>
+                        <div class="ms-3">
+                            <h6 class="card-title mb-1 text-secondary">Aktif Kullanıcılar</h6>
+                            <h3 class="mb-0">{{ $activeUsers ?? 0 }}</h3>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-dark text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle p-3" style="background: rgba(46, 204, 113, 0.2)">
+                            <i class="fas fa-question-circle fa-2x text-success"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="card-title mb-1 text-secondary">Toplam Soru</h6>
+                            <h3 class="mb-0">{{ $totalQuestions ?? 0 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-dark text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle p-3" style="background: rgba(241, 196, 15, 0.2)">
+                            <i class="fas fa-clock fa-2x text-warning"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="card-title mb-1 text-secondary">Bekleyen</h6>
+                            <h3 class="mb-0">{{ $pendingQuestions ?? 0 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 bg-dark text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle p-3" style="background: rgba(155, 89, 182, 0.2)">
+                            <i class="fas fa-comments fa-2x text-purple"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="card-title mb-1 text-secondary">Toplam Cevap</h6>
+                            <h3 class="mb-0">{{ $totalAnswers ?? 0 }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Ana İçerik -->
+    <div class="row">
+        <div class="col-12">
             <!-- Bekleyen Sorular Tablosu -->
-            <div class="card mb-4 text-light">
-                <div class="card-header">
-                    <h5 class="mb-0">Bekleyen Sorular</h5>
+            <div class="card bg-dark text-white border-0 shadow-sm mb-4">
+                <div class="card-header border-0 py-3">
+                    <h5 class="mb-0"><i class="fas fa-question-circle me-2 text-info"></i>Bekleyen Sorular</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-dark table-hover align-middle">
                             <thead>
-                                <tr>
+                                <tr class="text-secondary">
                                     <th>Başlık</th>
                                     <th>Yazar</th>
                                     <th>Tarih</th>
@@ -88,154 +106,181 @@
                             <tbody>
                                 @forelse ($pendingQuestionsList ?? [] as $question)
                                 <tr>
-                                    <td>{{ $question->title ?? '' }}</td>
-                                    <td>{{ $question->user->username ?? '' }}</td>
-                                    <td>{{ $question->created_at ?? '' }}</td>
+                                    <td class="text-white">{{ $question->title ?? '' }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-success approve-btn" data-id="{{ $question->id }}">
-                                            <i class="fas fa-check"></i> Onayla
-                                        </button>
-                                        <button class="btn btn-sm btn-danger reject-btn" data-id="{{ $question->id }}">
-                                            <i class="fas fa-times"></i> Reddet
-                                        </button>
-                                        <button class="btn btn-sm btn-info detail-btn" data-id="{{ $question->id }}">
-                                            <i class="fas fa-info-circle"></i> Detay
-                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle bg-secondary bg-opacity-25 p-2 me-2">
+                                                <i class="fas fa-user text-info"></i>
+                                            </div>
+                                            <span class="text-white">{{ $question->user->username ?? '' }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-secondary">{{ $question->created_at ?? '' }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-outline-success approve-btn" data-id="{{ $question->id }}">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger reject-btn" data-id="{{ $question->id }}">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-info detail-btn" data-id="{{ $question->id }}">
+                                                <i class="fas fa-info-circle"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center">Bekleyen soru yok</td>
+                                    <td colspan="4" class="text-center py-4 text-secondary">
+                                        <i class="fas fa-inbox fa-2x mb-3"></i>
+                                        <p class="mb-0">Bekleyen soru bulunmamaktadır</p>
+                                    </td>
                                 </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-
-            <!-- Bekleyen Soru Detay Kartı -->
-            <div class="card mb-4 position-fixed top-50 start-50 translate-middle" id="question-detail-card" style="display: none; background-color: #343a40; color: white; z-index: 1050;">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Soru Detayları</h5>
-                    <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="$('#question-detail-card').hide();"></button>
-                </div>
-                <div class="card-body">
-                    <h5 id="question-title"></h5>
-                    <p id="question-content"></p>
-                    <p><strong>Yazar ID:</strong> <span id="question-author-id"></span></p>
-                    <p><strong>Yazar:</strong> <span id="question-author"></span></p>
-                    <p><strong>Tarih:</strong> <span id="question-date"></span></p>
                 </div>
             </div>
 
             <!-- Kullanıcılar Tablosu -->
-
-            <div class="card text-light">
-                <div class="card-header">
-                    <h5 class="mb-0">Kullanıcılar</h5>
+            <div class="card bg-dark text-white border-0 shadow-sm mb-4">
+                <div class="card-header border-0 py-3">
+                    <h5 class="mb-0"><i class="fas fa-users me-2 text-info"></i>Kullanıcılar</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="mb-2">Üyeler</h6>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Kullanıcı Adı</th>
-                                    <th>Email</th>
-                                    <th>İşlemler</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($users ?? [] as $user)
-                                <tr>
-                                    <td>{{ $user->id }}</td>
-                                    <td><i class="fas fa-user me-2"></i>{{ $user->username }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>
-                                        @if ($user->is_banned)
-                                            <button class="btn btn-sm btn-success unban-btn" data-id="{{ $user->id }}">
-                                                <i class="fas fa-lock-open"></i> Banı Kaldır
-                                            </button>
-                                        @else
-                                            <button class="btn btn-sm btn-warning ban-btn" data-id="{{ $user->id }}">
-                                                <i class="fas fa-ban"></i> Ban
-                                            </button>
-                                        @endif
-                                        <button class="btn btn-sm btn-danger ban-btn" data-id="{{ $user->id }}">
-                                                <i class="fas fa-times"></i> Sil
-                                            </button>
-                                        <button class="btn btn-sm btn-primary make-admin-btn" data-id="{{ $user->id }}">
-                                            <i class="fas fa-crown"></i> Yetki Ver
-                                        </button>
-                                        <button class="btn btn-sm btn-secondary others-btn" data-id="{{ $user->id }}">
-                                            <i class="fas fa-caret-down"></i> Diğer İşlemler
-                                        </button>
-                                        <button class="btn btn-sm btn-info user-detail-btn" data-id="{{ $user->id }}">
-                                            <i class="fas fa-info-circle"></i> Bilgiler
-                                        </button>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">Kullanıcı bulunmamaktadır</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                    <ul class="nav nav-tabs mb-3 border-0">
+                        <li class="nav-item">
+                            <a class="nav-link active bg-transparent text-white border-info" data-bs-toggle="tab" href="#users-tab">Üyeler</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link bg-transparent text-secondary" data-bs-toggle="tab" href="#admins-tab">Adminler</a>
+                        </li>
+                    </ul>
 
-                    <h6 class="mb-2 mt-4">Adminler</h6>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Kullanıcı Adı</th>
-                                    <th>Email</th>
-                                    <th>İşlemler</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($admins ?? [] as $admin)
-                                <tr>
-                                    <td>{{ $admin->id }}</td>
-                                    <td><i class="fas fa-crown me-2"></i>{{ $admin->username }}</td>
-                                    <td>{{ $admin->email }}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-warning remove-admin-btn" data-id="{{ $admin->id }}">
-                                            <i class="fas fa-times"></i> Yetkiyi Kaldır
-                                        </button>
-                                        <button class="btn btn-sm btn-secondary others-btn" data-id="{{ $admin->id }}">
-                                            <i class="fas fa-caret-down"></i> Diğer İşlemler
-                                        </button>
-                                        <button class="btn btn-sm btn-info user-detail-btn" data-id="{{ $admin->id }}">
-                                            <i class="fas fa-info-circle"></i> Bilgiler
-                                        </button>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">Admin bulunmamaktadır</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="users-tab">
+                            <div class="table-responsive">
+                                <table class="table table-dark table-hover align-middle">
+                                    <thead>
+                                        <tr class="text-secondary">
+                                            <th>ID</th>
+                                            <th>Kullanıcı Adı</th>
+                                            <th>Email</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($users ?? [] as $user)
+                                        <tr>
+                                            <td class="text-white">{{ $user->id }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="rounded-circle bg-secondary bg-opacity-25 p-2 me-2">
+                                                        <i class="fas fa-user text-info"></i>
+                                                    </div>
+                                                    <span class="text-white">{{ $user->username }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-secondary">{{ $user->email }}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    @if ($user->is_banned)
+                                                        <button class="btn btn-sm btn-outline-success unban-btn" data-id="{{ $user->id }}">
+                                                            <i class="fas fa-lock-open"></i>
+                                                        </button>
+                                                    @else
+                                                        <button class="btn btn-sm btn-outline-warning ban-btn" data-id="{{ $user->id }}">
+                                                            <i class="fas fa-ban"></i>
+                                                        </button>
+                                                    @endif
+                                                    <button class="btn btn-sm btn-outline-danger" data-id="{{ $user->id }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-primary make-admin-btn" data-id="{{ $user->id }}">
+                                                        <i class="fas fa-crown"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-info user-detail-btn" data-id="{{ $user->id }}">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center py-4 text-secondary">
+                                                <i class="fas fa-users fa-2x mb-3"></i>
+                                                <p class="mb-0">Kullanıcı bulunmamaktadır</p>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="admins-tab">
+                            <div class="table-responsive">
+                                <table class="table table-dark table-hover align-middle">
+                                    <thead>
+                                        <tr class="text-secondary">
+                                            <th>ID</th>
+                                            <th>Kullanıcı Adı</th>
+                                            <th>Email</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($admins ?? [] as $admin)
+                                        <tr>
+                                            <td class="text-white">{{ $admin->id }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-2">
+                                                        <i class="fas fa-crown text-warning"></i>
+                                                    </div>
+                                                    <span class="text-white">{{ $admin->username }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-secondary">{{ $admin->email }}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-sm btn-outline-warning remove-admin-btn" data-id="{{ $admin->id }}">
+                                                        <i class="fas fa-user-minus"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-info user-detail-btn" data-id="{{ $admin->id }}">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center py-4 text-secondary">
+                                                <i class="fas fa-user-shield fa-2x mb-3"></i>
+                                                <p class="mb-0">Admin bulunmamaktadır</p>
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Mesajlar -->
-            <div class="card mb-4 mt-4 text-light">
-                <div class="card-header">
-                    <h5 class="mb-0">Mesajlar</h5>
+            <div class="card bg-dark text-white border-0 shadow-sm mb-4">
+                <div class="card-header border-0 py-3">
+                    <h5 class="mb-0"><i class="fas fa-envelope me-2 text-info"></i>Mesajlar</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-dark table-hover align-middle">
                             <thead>
-                                <tr>
+                                <tr class="text-secondary">
                                     <th>Mesaj</th>
                                     <th>Tarih</th>
                                     <th>İşlemler</th>
@@ -244,20 +289,25 @@
                             <tbody>
                                 @forelse ($contacts ?? [] as $contact)
                                 <tr>
-                                    <td>{{ Str::limit($contact->message ?? '', 50) }}</td>
-                                    <td>{{ $contact->created_at ?? 'Belirsiz' }}</td>
+                                    <td class="text-white">{{ Str::limit($contact->message ?? '', 50) }}</td>
+                                    <td class="text-secondary">{{ $contact->created_at ?? 'Belirsiz' }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-info contact-detail-btn" data-id="{{ $contact->id }}">
-                                            <i class="fas fa-info-circle"></i> Detay
-                                        </button>
-                                        <button class="btn btn-sm btn-danger contact-delete-btn" data-id="{{ $contact->id }}">
-                                            <i class="fas fa-times"></i> Sil
-                                        </button>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-outline-info contact-detail-btn" data-id="{{ $contact->id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger contact-delete-btn" data-id="{{ $contact->id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="3" class="text-center">Mesaj bulunmamaktadır.</td>
+                                    <td colspan="3" class="text-center py-4 text-secondary">
+                                        <i class="fas fa-inbox fa-2x mb-3"></i>
+                                        <p class="mb-0">Mesaj bulunmamaktadır</p>
+                                    </td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -267,62 +317,74 @@
             </div>
 
             <!-- Son Aktiviteler -->
-            <div class="card mb-4 mt-4 text-light">
-                <div class="card-header">
-                    <h5 class="mb-0">Son Aktiviteler</h5>
+            <div class="card bg-dark text-white border-0 shadow-sm mb-4">
+                <div class="card-header border-0 py-3">
+                    <h5 class="mb-0"><i class="fas fa-history me-2 text-info"></i>Son Aktiviteler</h5>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
                         @forelse ($recentActivities ?? [] as $activity)
-                        <li class="list-group-item">
-                            <i class="fas fa-clock me-2"></i>
-                            {{ $activity->description ?? '' }}
-                            <small class="text-muted float-end">{{ $activity->created_at ?? '' }}</small>
-                        </li>
+                        <div class="list-group-item bg-dark border-secondary d-flex align-items-center py-3">
+                            <div class="rounded-circle bg-secondary bg-opacity-25 p-2 me-3">
+                                <i class="fas fa-clock text-info"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <span class="text-white">{{ $activity->description ?? '' }}</span>
+                                <small class="d-block text-secondary">{{ $activity->created_at ?? '' }}</small>
+                            </div>
+                        </div>
                         @empty
-                        <li class="list-group-item text-center">Aktivite bulunmamaktadır</li>
+                        <div class="text-center py-4 text-secondary">
+                            <i class="fas fa-stream fa-2x mb-3"></i>
+                            <p class="mb-0">Aktivite bulunmamaktadır</p>
+                        </div>
                         @endforelse
-                    </ul>
-                </div>
-            </div>
-
-            
-
-            
-            <div class="card mb-4 position-fixed top-50 start-50 translate-middle" id="user-detail-card" style="display: none; background-color: #343a40; color: white; z-index: 1050;">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Kullanıcı Detayları</h5>
-                    <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="$('#user-detail-card').hide();"></button>
-                </div>
-                <div class="card-body">
-                    <h5 id="question-title"></h5>
-                    <p id="question-content"></p>
-                    <p><strong>ID:</strong> <span id="id"></span></p>
-                    <p><strong>Kullanıcı Adı:</strong> <span id="username"></span></p>
-                    <p><strong>Email:</strong> <span id="email"></span></p>
-                    <p><strong>Kayıt Tarihi:</strong> <span id="created_at"></span></p>
-                </div>
-            </div>
-
-            <!-- İletişim Detay Kartı -->
-            <div class="card mb-4 position-fixed top-50 start-50 translate-middle" id="contact-detail-card" style="display: none; background-color: #343a40; color: white; z-index: 1050;">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">İletişim Mesajı Detayları</h5>
-                    <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="$('#contact-detail-card').hide();"></button>
-                </div>
-                <div class="card-body">
-                    <p><strong>Gönderen:</strong> <span id="contact-name"></span></p>
-                    <p><strong>Email:</strong> <span id="contact-email"></span></p>
-                    <p><strong>Tarih:</strong> <span id="contact-date"></span></p>
-                    <div class="mt-3">
-                        <strong>Mesaj:</strong>
-                        <p id="contact-message" class="mt-2 p-3 bg-secondary rounded"></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.bg-dark {
+    background-color: #1a1d21 !important;
+}
+.card {
+    background-color: #1a1d21;
+}
+.table-dark {
+    background-color: #1a1d21;
+    color: #fff;
+}
+.table-dark td, .table-dark th {
+    border-color: #2d3238;
+}
+.nav-tabs .nav-link {
+    color: #fff;
+}
+.nav-tabs .nav-link:hover {
+    border-color: #3498db;
+}
+.nav-tabs .nav-link.active {
+    background-color: transparent;
+    border-color: #3498db;
+    border-bottom-color: transparent;
+}
+.btn-outline-light:hover {
+    background-color: #2d3238;
+}
+.modal-custom {
+    background: #1a1d21;
+    color: #fff;
+}
+.text-purple {
+    color: #9b59b6;
+}
+.btn-group .btn {
+    margin: 0 2px;
+}
+</style>
 
 @push('scripts')
 <script>

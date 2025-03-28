@@ -5,7 +5,7 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card text-white">
+        <div class="card text-white bg-dark mb-4">
             <div class="card-header">
                 <h3 class="mb-0"><i class="fas fa-envelope"></i> Bizimle İletişime Geçin</h3>
             </div>
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <div class="card mt-4 text-white">
+        <div class="card mt-4 text-white bg-dark mb-4">
             <div class="card-body">
                 <h4><i class="fas fa-map-marker-alt"></i> Adres</h4>
                 <p>İstanbul, Türkiye</p>
