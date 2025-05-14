@@ -52,4 +52,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Vote::class);
     }
+
+    /**
+     * Route notifications for the database channel.
+     */
+    public function routeNotificationForDatabase()
+    {
+        return $this->notifications();
+    }
+
+    public function markAllNotificationsAsRead()
+    {
+        $this->unreadNotifications->markAsRead();
+    }
 }

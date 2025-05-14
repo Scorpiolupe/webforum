@@ -281,8 +281,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <img src="{{ asset('logo/logo.png') }}" alt="Forum Logo" height="30" class="d-inline-block align-text-top me-2">
-                ÇOMÜ Forum
+                Forum
             </a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -290,25 +289,6 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Ana Sayfa</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-list me-1"></i> Kategoriler
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            @if(isset($categories) && count($categories) > 0)
-                            @foreach($categories as $category)
-                            <li>
-                                <a class="dropdown-item" href="/categories/{{ $category->id }}">
-                                    {{ $category->name }}
-                                    <span class="badge bg-primary float-end">{{ $category->questions()->count() }}</span>
-                                </a>
-                            </li>
-                            @endforeach
-                            @else
-                            <li><a class="dropdown-item">Henüz kategori bulunmamaktadır.</a></li>
-                            @endif
-                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/topics"><i class="fas fa-newspaper me-1"></i> Konular</a>
@@ -319,6 +299,40 @@
                 </ul>
                 <ul class="navbar-nav">
                     @auth
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            @if(Auth::user()->unreadNotifications->count() > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ Auth::user()->unreadNotifications->count() }}
+                                </span>
+                            @endif
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown" style="width: 300px; max-height: 400px; overflow-y: auto;">
+                            @forelse(Auth::user()->notifications as $notification)
+                                <li>
+                                    <a class="dropdown-item {{ $notification->read_at ? 'text-muted' : '' }}" href="#">
+                                        <small class="float-end text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                        <p class="mb-0">{{ $notification->data['message'] }}</p>
+                                    </a>
+                                </li>
+                                @if(!$loop->last)
+                                    <li><hr class="dropdown-divider"></li>
+                                @endif
+                            @empty
+                                <li><a class="dropdown-item">Bildirim bulunmamaktadır.</a></li>
+                            @endforelse
+                            @if(Auth::user()->notifications->count() > 0)
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="/notifications/mark-all-read" method="POST" class="d-inline">
+                                        @csrf
+                                        <button class="dropdown-item text-center">Tümünü okundu işaretle</button>
+                                    </form>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user me-1"></i> {{ Auth::user()->username }}

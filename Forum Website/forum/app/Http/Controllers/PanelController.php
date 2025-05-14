@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use App\Models\Notification;
 use App\Models\Question;
 use App\Models\Topic;
 use App\Models\User;
@@ -72,6 +73,7 @@ class PanelController extends Controller
         $question = Topic::findOrFail($request->id);
         $question->is_approved = true;
         $question->save();
+        
 
         return response()->json(['success' => true]);
     }
