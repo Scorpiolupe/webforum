@@ -52,115 +52,113 @@
             </div>
         </div>
 
-        @auth
-            <div class="card mb-4 text-light collapse" id="newTopicCard">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-plus"></i> Yeni Konu Oluştur</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-toggle="collapse" data-bs-target="#newTopicCard"></button>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('topics.store') }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                           "" <label for="title" class="form-label">Konu Başlığı</label>
-                            <input type="text" class="form-control @error('title') is-invalid @enderror" 
-                                   id="title" name="title" required minlength="5" maxlength="255">
-                            @error('title')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="category_id" class="form-label">Kategori</label>
-                            <select class="form-select @error('category_id') is-invalid @enderror" 
-                                    id="category_id" name="category_id" required>
-                                <option value="" class="bg-dark text-light">Kategori Seçin</option>
-                                @foreach($categories ?? [] as $category)
-                                    <option value="{{ $category->id }}" class="bg-dark text-light">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('category_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="content" class="form-label">İçerik</label>
-                            <textarea class="form-control @error('content') is-invalid @enderror" 
-                                      id="content" name="content" rows="5" required minlength="20"></textarea>
-                            @error('content')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i> Gönder
-                        </button>
-                    </form>
-                </div>
-            </div>
-        @endauth
-
-        
-            <div class="card-body">
-                @if(isset($topics) && count($topics) > 0)
-                    @foreach($topics as $topic)
-                        <div class="card mb-3 topic-card" 
-                            data-category-id="{{ $topic->category_id ?? '' }}"
-                            data-created-at="{{ $topic->created_at }}"
-                            data-upvotes="{{ $topic->upvotes()->count() }}"
-                            data-views="{{ $topic->view_count ?? 0 }}">
-                            <div class="card-body bg-dark text-light">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="card-title">
-                                            <a href="/topics/{{ $topic->id }}" class="text-decoration-none text-light">
-                                                {{ $topic->title }}
-                                            </a>
-                                        </h5>
-                                        <p class="card-text text-light text-muted">
-                                            <small>
-                                                <i class="fas fa-user"></i> {{ $topic->user->username ?? 'Anonim' }} |
-                                                <i class="fas fa-folder"></i> {{ $topic->category->name ?? 'Kategorisiz' }} |
-                                                <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }}
-                                                @if($topic->updated_at != $topic->created_at)
-                                                    | <i class="fas fa-edit"></i> {{ $topic->updated_at->diffForHumans() }} düzenlendi
-                                                @endif |
-                                                <i class="fas fa-comments"></i> {{ is_countable($topic->replies) ? count($topic->replies) : 0 }} Yanıt
-                                            </small>
-                                        </p>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        @if($topic->is_locked)
-                                            <span class="badge bg-danger me-2">Kilitli</span>
-                                        @else
-                                            <span class="badge bg-success m-2">Açık</span>
-                                        @endif
-                                        <span class="badge bg-primary me-2">{{ $topic->view_count ?? 0 }} Görüntülenme</span></span>
-                                        <button class="btn btn-outline-success btn-sm me-1 upvote-btn" data-id="{{ $topic->id }}">
-                                            <i class="fas fa-arrow-up"></i> {{ $topic->upvotes()->count() }}
-                                        </button>
-                                        <button class="btn btn-outline-danger btn-sm downvote-btn" data-id="{{ $topic->id }}">
-                                            <i class="fas fa-arrow-down"></i> {{ $topic->downvotes()->count() }}
-                                        </button>
-                                    </div>
+        <div class="card-body">
+            @if(isset($topics) && count($topics) > 0)
+                @foreach($topics as $topic)
+                    <div class="card mb-3 topic-card" 
+                        data-category-id="{{ $topic->category_id ?? '' }}"
+                        data-created-at="{{ $topic->created_at }}"
+                        data-upvotes="{{ $topic->upvotes()->count() }}"
+                        data-views="{{ $topic->view_count ?? 0 }}">
+                        <div class="card-body bg-dark text-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">
+                                        <a href="/topics/{{ $topic->id }}" class="text-decoration-none text-light">
+                                            {{ $topic->title }}
+                                        </a>
+                                    </h5>
+                                    <p class="card-text text-light text-muted">
+                                        <small>
+                                            <i class="fas fa-user"></i> {{ $topic->user->username ?? 'Anonim' }} |
+                                            <i class="fas fa-folder"></i> {{ $topic->category->name ?? 'Kategorisiz' }} |
+                                            <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }}
+                                            @if($topic->updated_at != $topic->created_at)
+                                                | <i class="fas fa-edit"></i> {{ $topic->updated_at->diffForHumans() }} düzenlendi
+                                            @endif |
+                                            <i class="fas fa-comments"></i> {{ is_countable($topic->replies) ? count($topic->replies) : 0 }} Yanıt
+                                        </small>
+                                    </p>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    @if($topic->is_locked)
+                                        <span class="badge bg-danger me-2">Kilitli</span>
+                                    @else
+                                        <span class="badge bg-success m-2">Açık</span>
+                                    @endif
+                                    <span class="badge bg-primary me-2">{{ $topic->view_count ?? 0 }} Görüntülenme</span></span>
+                                    <button class="btn btn-outline-success btn-sm me-1 upvote-btn" data-id="{{ $topic->id }}">
+                                        <i class="fas fa-arrow-up"></i> {{ $topic->upvotes()->count() }}
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm downvote-btn" data-id="{{ $topic->id }}">
+                                        <i class="fas fa-arrow-down"></i> {{ $topic->downvotes()->count() }}
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                    
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $topics->links() }}
                     </div>
-                @else
-                    <div class="text-center text-light">
-                        <p>Henüz konu bulunmamaktadır.</p>
-                    </div>
-                @endif
-            </div>
+                @endforeach
+                
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $topics->links() }}
+                </div>
+            @else
+                <div class="text-center text-light">
+                    <p>Henüz konu bulunmamaktadır.</p>
+                </div>
+            @endif
         </div>
     </div>
 </div>
+
+@auth
+    <div class="card text-light collapse new-topic-modal" id="newTopicCard">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-plus"></i> Yeni Konu Oluştur</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-toggle="collapse" data-bs-target="#newTopicCard"></button>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('topics.store') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="title" class="form-label">Konu Başlığı</label>
+                    <input type="text" class="form-control @error('title') is-invalid @enderror" 
+                           id="title" name="title" required minlength="5" maxlength="255">
+                    @error('title')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="category_id" class="form-label">Kategori</label>
+                    <select class="form-select @error('category_id') is-invalid @enderror" 
+                            id="category_id" name="category_id" required>
+                        <option value="" class="bg-dark text-light">Kategori Seçin</option>
+                        @foreach($categories ?? [] as $category)
+                            <option value="{{ $category->id }}" class="bg-dark text-light">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="content" class="form-label">İçerik</label>
+                    <textarea class="form-control @error('content') is-invalid @enderror" 
+                              id="content" name="content" rows="5" required minlength="20"></textarea>
+                    @error('content')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Gönder
+                </button>
+            </form>
+        </div>
+    </div>
+@endauth
 
 <style>
 .collapse {
@@ -181,8 +179,6 @@
     box-shadow: 0 0 0 0.25rem rgba(107, 70, 193, 0.25);
 }
 
-
-
 .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
@@ -198,6 +194,50 @@
 
 .topic-card.hidden {
     display: none;
+}
+
+.new-topic-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1060; /* z-index değerini arttırdık */
+    width: 90%;
+    max-width: 600px;
+    pointer-events: none; /* Başlangıçta tıklamayı devre dışı bırak */
+}
+
+.new-topic-modal.show {
+    display: block;
+    pointer-events: auto; /* Modal gösterildiğinde tıklamayı etkinleştir */
+}
+
+.new-topic-modal .card-body {
+    background-color: var(--secondary-bg);
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1055; /* Modal'dan düşük, diğer elementlerden yüksek */
+    display: none;
+    pointer-events: auto;
+}
+
+.modal-backdrop.show {
+    display: block;
+}
+
+/* Form elemanlarına hover durumunda stabilite sağlamak için */
+.new-topic-modal input:hover,
+.new-topic-modal select:hover,
+.new-topic-modal textarea:hover {
+    z-index: 1061;
+    position: relative;
 }
 </style>
 
@@ -261,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Event listeners
+    // Event listenerleri
     searchInput.addEventListener('input', filterAndSortTopics);
     categoryFilter.addEventListener('change', filterAndSortTopics);
     sortFilter.addEventListener('change', filterAndSortTopics);
@@ -274,10 +314,9 @@ document.addEventListener('DOMContentLoaded', function() {
         filterAndSortTopics();
     });
 
-    // Initial sort
     filterAndSortTopics();
 
-    // Form validation
+    // Form Validationu
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function(event) {
@@ -289,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Upvote and Downvote functionality
+    // Upvote and Downvote Fonksiyonluğu
     document.querySelectorAll('.upvote-btn').forEach(button => {
         button.addEventListener('click', function() {
             const questionId = this.getAttribute('data-id');
@@ -330,6 +369,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('Error:', error);
                 });
         });
+    });
+
+    // Modal işlemleri için yeni kod
+    const modalTrigger = document.querySelector('[data-bs-target="#newTopicCard"]');
+    const modal = document.getElementById('newTopicCard');
+    const closeButton = modal.querySelector('.btn-close');
+    
+    if (modalTrigger) {
+        modalTrigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.classList.add('show');
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop';
+            document.body.appendChild(backdrop);
+            setTimeout(() => backdrop.classList.add('show'), 10);
+        });
+    }
+    
+    if (closeButton) {
+        closeButton.addEventListener('click', function() {
+            modal.classList.remove('show');
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.classList.remove('show');
+                setTimeout(() => backdrop.remove(), 200);
+            }
+        });
+    }
+
+    // Backdrop'a tıklandığında modalı kapat
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal-backdrop')) {
+            modal.classList.remove('show');
+            e.target.classList.remove('show');
+            setTimeout(() => e.target.remove(), 200);
+        }
     });
 });
 </script>

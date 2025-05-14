@@ -59,4 +59,15 @@ Route::get('/topics/{question}/edit', [TopicController::class, 'edit'])->name('t
 Route::put('/topics/{question}', [TopicController::class, 'update'])->name('topics.update');
 Route::post('/topics/{question}/reply', [TopicController::class, 'reply'])->name('topics.reply')->middleware('auth');
 
+Route::get('/topics/{question}/reply/{reply}/edit', [TopicController::class, 'editReply'])
+    ->name('topics.editReply')
+    ->middleware('auth');
+Route::put('/topics/{question}/reply/{reply}', [TopicController::class, 'updateReply'])
+    ->name('topics.updateReply')
+    ->middleware('auth');
+Route::delete('/topics/{question}', [TopicController::class, 'destroy'])->name('topics.destroy')->middleware('auth');
+Route::delete('/topics/{question}/reply/{reply}', [TopicController::class, 'destroyReply'])
+    ->name('topics.destroyReply')
+    ->middleware('auth');
+
 Route::get('/categories', [CategoryController::class, 'index']);

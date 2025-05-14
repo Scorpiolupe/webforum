@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('topic_id')->constrained()->onDelete('NO ACTION');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('topic_id')->constrained()->onDelete('cascade');
             $table->boolean('is_upvote')->default(false);
             $table->boolean('is_downvote')->default(false);
             $table->dateTimeTz('created_at');

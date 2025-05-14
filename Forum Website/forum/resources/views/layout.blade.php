@@ -82,18 +82,39 @@
             border: 1px solid var(--border-color);
             border-radius: 0.375rem;
             margin-bottom: 1rem;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .card:hover {
+        /* Normal kartlar için hover efekti */
+        .topic-card.card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Modal için hover efektini devre dışı bırak */
+        .new-topic-modal.card:hover {
+            transform: none;
+            box-shadow: none;
         }
 
         .card-header {
             background-color: rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid var(--border-color);
             padding: 0.75rem 1rem;
+        }
+
+        /* Modal için özel stiller */
+        .new-topic-modal {
+            position: fixed !important;
+            transform: translate(-50%, -50%) !important;
+            transition: none !important;
+        }
+
+        .new-topic-modal .card-body {
+            position: static !important;
+        }
+
+        .new-topic-modal * {
+            pointer-events: auto !important;
         }
 
         .card-body {
