@@ -302,16 +302,35 @@
                     <li class="nav-item dropdown me-2">
                         <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-bell"></i>
-                            @if(Auth::user()->unreadNotifications->count() > 0)
+                            @php
+                                $unreadCount = Auth::user()->unreadNotifications()->count();
+                            @endphp
+                            @if($unreadCount > 0)
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ Auth::user()->unreadNotifications->count() }}
+                                    {{ $unreadCount }}
                                 </span>
                             @endif
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown" style="width: 300px; max-height: 400px; overflow-y: auto;">
-                            @forelse(Auth::user()->notifications as $notification)
+                            @php
+                                $notifications = DB::table('notifications')
+                                    ->where('notifiable_type', 'App\Models\User')
+                                    ->where('notifiable_id', Auth::id())
+                                    ->orderBy('created_at', 'desc')
+                                    ->take(10)
+                                    ->get()
+                                    ->map(function($notification) {
+                                        $notification->created_at = \Carbon\Carbon::parse($notification->created_at);
+                                        $notification->data = json_decode($notification->data, true);
+                                        return $notification;
+                                    });
+                            @endphp
+                            @forelse($notifications as $notification)
                                 <li>
-                                    <a class="dropdown-item {{ $notification->read_at ? 'text-muted' : '' }}" href="#">
+                                    <a class="dropdown-item notification-item {{ $notification->read_at ? 'text-muted' : '' }}" 
+                                       href="#" 
+                                       data-notification-id="{{ $notification->id }}"
+                                       onclick="markAsRead('{{ $notification->id }}')">
                                         <small class="float-end text-muted">{{ $notification->created_at->diffForHumans() }}</small>
                                         <p class="mb-0">{{ $notification->data['message'] }}</p>
                                     </a>
@@ -322,15 +341,6 @@
                             @empty
                                 <li><a class="dropdown-item">Bildirim bulunmamaktadır.</a></li>
                             @endforelse
-                            @if(Auth::user()->notifications->count() > 0)
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form action="/notifications/mark-all-read" method="POST" class="d-inline">
-                                        @csrf
-                                        <button class="dropdown-item text-center">Tümünü okundu işaretle</button>
-                                    </form>
-                                </li>
-                            @endif
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -418,6 +428,35 @@
                 }
             });
         });
+
+        function markAsRead(notificationId) {
+            axios.post(`/notifications/${notificationId}/mark-as-read`, {
+                _token: '{{ csrf_token() }}'
+            })
+            .then(response => {
+                if (response.data.success) {
+                    const notificationItem = document.querySelector(`[data-notification-id="${notificationId}"]`);
+                    if (notificationItem) {
+                        notificationItem.classList.add('text-muted');
+                    }
+                    
+                    updateNotificationBadge();
+                }
+            })
+            .catch(error => console.error('Error marking notification as read:', error));
+        }
+
+        function updateNotificationBadge() {
+            const badge = document.querySelector('#notificationDropdown .badge');
+            if (badge) {
+                const currentCount = parseInt(badge.textContent);
+                if (currentCount <= 1) {
+                    badge.remove();
+                } else {
+                    badge.textContent = currentCount - 1;
+                }
+            }
+        }
     </script>
     @stack('scripts')
 </body>

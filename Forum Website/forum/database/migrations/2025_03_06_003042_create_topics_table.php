@@ -26,8 +26,8 @@ return new class extends Migration
             $table->integer('best_answer_id')->nullable();
             $table->integer('view_count')->default(0);    
             $table->boolean('is_resolved')->default(false);        
-            $table->string('created_at');
-            $table->string('updated_at');
+            $table->dateTimeTz('created_at');
+            $table->dateTimeTz('updated_at');
         });
     }
 

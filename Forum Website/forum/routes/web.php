@@ -8,6 +8,7 @@ use App\Http\Controllers\TopicController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('home');
@@ -37,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/topics/{topicId}/upvote', [VoteController::class, 'upvote'])->name('topics.upvote');
     Route::post('/topics/{topicId}/downvote', [VoteController::class, 'downvote'])->name('topics.downvote');
 });
+
+Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
 
 // Profile
 Route::get('/profile/{userId}', [ProfileController::class, 'index'])->name('profile');

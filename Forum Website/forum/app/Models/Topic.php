@@ -25,6 +25,11 @@ class Topic extends Model
         'is_resolved'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

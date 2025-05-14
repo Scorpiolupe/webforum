@@ -94,7 +94,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-dark table-hover align-middle">
+                        <table class="table table-dark table-hover align-middle" id="pendingQuestions">
                             <thead>
                                 <tr class="text-secondary">
                                     <th>Başlık</th>
@@ -564,6 +564,7 @@
     // Soruyu onayla
     $('.approve-btn').click(function() {
         const questionId = $(this).data('id');
+        const row = $(this).closest('tr');
 
         $.ajax({
             url: '{{ route("panel.approve") }}',
@@ -574,8 +575,16 @@
             },
             success: function(response) {
                 if (response.success) {
-                    location.reload(); // Sayfayı yenile
+                    row.fadeOut(400, function() {
+                        row.remove();
+                        if($('#pendingQuestions tr').length === 0) {
+                            $('#pendingQuestions').append('<tr><td colspan="4" class="text-center">Bekleyen soru bulunmamaktadır.</td></tr>');
+                        }
+                    });
                 }
+            },
+            error: function(xhr) {
+                alert('Bir hata oluştu: ' + xhr.responseJSON.message);
             }
         });
     });
@@ -585,7 +594,7 @@
         const questionId = $(this).data('id');
         const row = $(this).closest('tr');
 
-        if (confirm('Bu soruyu silmek istediğinizden emin misiniz?')) {
+        if (confirm('Bu soruyu reddetmek istediğinizden emin misiniz?')) {
             $.ajax({
                 url: '{{ route("panel.reject") }}',
                 type: 'POST',
@@ -595,13 +604,20 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        row.fadeOut();
+                        row.fadeOut(400, function() {
+                            row.remove();
+                            if($('#pendingQuestions tr').length === 0) {
+                                $('#pendingQuestions').append('<tr><td colspan="4" class="text-center">Bekleyen soru bulunmamaktadır.</td></tr>');
+                            }
+                        });
                     }
+                },
+                error: function(xhr) {
+                    alert('Bir hata oluştu: ' + xhr.responseJSON.message);
                 }
             });
         }
     });
-
 
     // Kullanıcıyı banla
     $('.ban-btn').click(function() {

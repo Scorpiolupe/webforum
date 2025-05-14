@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PanelController extends Controller
 {
@@ -70,26 +71,80 @@ class PanelController extends Controller
 
     public function approveQuestion(Request $request)
     {
-        $question = Topic::findOrFail($request->id);
-        $question->is_approved = true;
-        $question->save();
-        
+        try {
+            $question = Topic::findOrFail($request->id);
+            $question->is_approved = true;
+            $question->save();
+            
+            Notification::create([
+                'id' => Str::uuid()->toString(),
+                'type' => 'App\Notifications\QuestionApproved',
+                'notifiable_type' => 'App\Models\User',
+                'notifiable_id' => $question->user_id,
+                'data' => [
+                    'message' => 'Sorunuz onaylandı.',
+                    'question_id' => $question->id
+                ]
+            ]);
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bir hata oluştu: ' . $e->getMessage()
+            ], 500);
+        }
     }
     
     public function rejectQuestion(Request $request)
     {
-        $question = Topic::findOrFail($request->id);
-        $question->delete();
-        
-        return response()->json(['success' => true]);
+        try {
+            $question = Topic::findOrFail($request->id);
+            $userId = $question->user_id;
+            $question->delete();
+
+            DB::table('notifications')->insert([
+                'id' => Str::uuid()->toString(),
+                'type' => 'App\Notifications\QuestionRejected',
+                'notifiable_type' => 'App\Models\User',
+                'notifiable_id' => $userId,
+                'data' => json_encode([
+                    'message' => 'Sorunuz reddedildi.',
+                    'question_id' => $request->id
+                ]),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'id' => $request->id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function deleteQuestion(Request $request)
     {
         $question = Topic::findOrFail($request->id);
         $question->delete();
+
+        DB::table('notifications')->insert([
+            'id' => Str::uuid()->toString(),
+            'type' => 'App\Notifications\QuestionDeleted',
+            'notifiable_type' => 'App\Models\User',
+            'notifiable_id' => $question->user_id,
+            'data' => json_encode([
+                'message' => 'Sorunuz silindi.',
+                'question_id' => $request->id
+            ]),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
         return response()->json(['success' => true]);
     }
