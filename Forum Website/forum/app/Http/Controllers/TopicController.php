@@ -61,10 +61,23 @@ class TopicController extends Controller
     {
         $topics = Topic::with(['user', 'category'])
             ->where('is_approved', true)
-            ->orderBy('created_at', 'desc')
+            ->when(request('sort') == 'oldest', function($query) {
+                return $query->orderBy('created_at', 'asc');
+            })
+            ->when(request('sort') == 'most_upvoted', function($query) {
+                // Doğrudan upvotes sütununa göre sırala
+                return $query->orderBy('upvotes', 'desc');
+            })
+            ->when(request('sort') == 'most_viewed', function($query) {
+                return $query->orderBy('view_count', 'desc');
+            })
+            ->when(!request('sort') || request('sort') == 'latest', function($query) {
+                return $query->orderBy('created_at', 'desc');
+            })
             ->paginate(15);
             
-        return view('topics', compact('topics'));
+        $categories = Category::all();
+        return view('topics', compact('topics', 'categories'));
     }
 
     public function reply(Request $request, Topic $question)
@@ -127,5 +140,56 @@ class TopicController extends Controller
             return redirect()->route('topics.show', $question->id)->with('error', 'Bir hata oluştu.');
         }
         
+    }
+
+    public function editReply(Request $request, Topic $question, $replyId) 
+    {
+        $reply = $question->replies()->findOrFail($replyId);
+        
+        if (Auth::id() != $reply->user_id && !Auth::user()->is_admin) {
+            return redirect()->back()->with('error', 'Bu yanıtı düzenleme yetkiniz yok.');
+        }
+
+        return view('topics.edit-reply', compact('question', 'reply'));
+    }
+
+    public function updateReply(Request $request, Topic $question, $replyId)
+    {
+        $reply = $question->replies()->findOrFail($replyId);
+
+        if (Auth::id() != $reply->user_id && !Auth::user()->is_admin) {
+            return redirect()->back()->with('error', 'Bu yanıtı düzenleme yetkiniz yok.');
+        }
+
+        $validated = $request->validate([
+            'content' => 'required|min:5'
+        ]);
+
+        $reply->update($validated);
+
+        return redirect()->route('topics.show', $question->id)
+            ->with('success', 'Yanıtınız başarıyla güncellendi.');
+    }
+
+    public function destroy(Topic $question)
+    {
+        if (Auth::id() != $question->user_id && !Auth::user()->is_admin) {
+            return redirect()->back()->with('error', 'Bu konuyu silme yetkiniz yok.');
+        }
+
+        $question->delete();
+        return redirect()->route('topics')->with('success', 'Konu başarıyla silindi.');
+    }
+
+    public function destroyReply(Topic $question, $replyId)
+    {
+        $reply = $question->replies()->findOrFail($replyId);
+
+        if (Auth::id() != $reply->user_id && !Auth::user()->is_admin) {
+            return redirect()->back()->with('error', 'Bu yanıtı silme yetkiniz yok.');
+        }
+
+        $reply->delete();
+        return redirect()->back()->with('success', 'Yanıt başarıyla silindi.');
     }
 }

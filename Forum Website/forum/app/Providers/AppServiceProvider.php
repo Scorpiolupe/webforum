@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use App\Http\ViewComposers\CategoryComposer;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -21,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Türkçe dil desteği
+        Carbon::setLocale('tr');
+        
         // Share categories with all views
         View::composer('*', CategoryComposer::class);
     }

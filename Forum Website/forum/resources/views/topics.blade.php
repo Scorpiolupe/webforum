@@ -31,6 +31,23 @@
                             <i class="fas fa-undo"></i> Sıfırla
                         </button>
                     </div>
+                    <div class="card bg-dark text-light">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0"><i class="fas fa-newspaper"></i> Konular</h4>
+                <div class="d-flex align-items-center gap-2">
+                    <select id="sortFilter" class="form-select form-select-sm bg-dark text-light border-primary" style="width: auto;">
+                        <option value="latest">En Son </option>
+                        
+                        <option value="most_upvoted">En Çok Oylanan </option>
+                        <option value="most_viewed">En Çok Görüntülenen</option>
+                    </select>
+                    @auth
+                        <button class="btn btn-light btn-sm" data-bs-toggle="collapse" data-bs-target="#newTopicCard">
+                            <i class="fas fa-plus"></i> Yeni Konu
+                        </button>
+                    @endauth
+                </div>
+            </div>
                 </div>
             </div>
         </div>
@@ -45,7 +62,7 @@
                     <form action="{{ route('topics.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="title" class="form-label">Konu Başlığı</label>
+                           "" <label for="title" class="form-label">Konu Başlığı</label>
                             <input type="text" class="form-control @error('title') is-invalid @enderror" 
                                    id="title" name="title" required minlength="5" maxlength="255">
                             @error('title')
@@ -84,19 +101,15 @@
             </div>
         @endauth
 
-        <div class="card bg-dark text-light">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                <h4 class="mb-0"><i class="fas fa-newspaper"></i> Konular</h4>
-                @auth
-                    <button class="btn btn-light btn-sm" data-bs-toggle="collapse" data-bs-target="#newTopicCard">
-                        <i class="fas fa-plus"></i> Yeni Konu
-                    </button>
-                @endauth
-            </div>
+        
             <div class="card-body">
                 @if(isset($topics) && count($topics) > 0)
                     @foreach($topics as $topic)
-                        <div class="card mb-3 topic-card" data-category-id="{{ $topic->category_id ?? '' }}">
+                        <div class="card mb-3 topic-card" 
+                            data-category-id="{{ $topic->category_id ?? '' }}"
+                            data-created-at="{{ $topic->created_at }}"
+                            data-upvotes="{{ $topic->upvotes()->count() }}"
+                            data-views="{{ $topic->view_count ?? 0 }}">
                             <div class="card-body bg-dark text-light">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
@@ -109,7 +122,10 @@
                                             <small>
                                                 <i class="fas fa-user"></i> {{ $topic->user->username ?? 'Anonim' }} |
                                                 <i class="fas fa-folder"></i> {{ $topic->category->name ?? 'Kategorisiz' }} |
-                                                <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }} |
+                                                <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }}
+                                                @if($topic->updated_at != $topic->created_at)
+                                                    | <i class="fas fa-edit"></i> {{ $topic->updated_at->diffForHumans() }} düzenlendi
+                                                @endif |
                                                 <i class="fas fa-comments"></i> {{ is_countable($topic->replies) ? count($topic->replies) : 0 }} Yanıt
                                             </small>
                                         </p>
@@ -191,40 +207,77 @@ document.addEventListener('DOMContentLoaded', function() {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const searchInput = document.getElementById('searchInput');
     const categoryFilter = document.getElementById('categoryFilter');
+    const sortFilter = document.getElementById('sortFilter');
     const resetButton = document.getElementById('resetFilters');
-    const topicCards = document.querySelectorAll('.card.mb-3');
+    const topicsContainer = document.querySelector('.card.bg-dark.text-light .card-body');
 
-    function filterTopics() {
+    function filterAndSortTopics() {
         const searchTerm = searchInput.value.toLowerCase();
         const selectedCategory = categoryFilter.value;
+        const sortBy = sortFilter.value;
+        
+        let topicArray = Array.from(document.querySelectorAll('.topic-card'));
 
-        topicCards.forEach(card => {
+        // Filtreleme
+        topicArray = topicArray.filter(card => {
             const title = card.querySelector('.card-title a').textContent.toLowerCase();
-            const category = card.querySelector('.fa-folder').parentElement.textContent;
             const categoryId = card.getAttribute('data-category-id');
-
             const matchesSearch = title.includes(searchTerm);
             const matchesCategory = !selectedCategory || categoryId === selectedCategory;
+            return matchesSearch && matchesCategory;
+        });
 
-            if (matchesSearch && matchesCategory) {
-                card.classList.remove('hidden');
-            } else {
-                card.classList.add('hidden');
+        // Sıralama
+        topicArray.sort((a, b) => {
+            switch(sortBy) {
+                case 'latest':
+                    return new Date(b.getAttribute('data-created-at')) - new Date(a.getAttribute('data-created-at'));
+                case 'oldest':
+                    return new Date(a.getAttribute('data-created-at')) - new Date(b.getAttribute('data-created-at'));
+                case 'most_upvoted':
+                    return parseInt(b.getAttribute('data-upvotes')) - parseInt(a.getAttribute('data-upvotes'));
+                case 'most_viewed':
+                    return parseInt(b.getAttribute('data-views')) - parseInt(a.getAttribute('data-views'));
+                default:
+                    return 0;
             }
         });
+
+        // Sonuçları gösterme
+        const topicsList = document.querySelector('.card-body');
+        const existingCards = topicsList.querySelectorAll('.topic-card');
+        existingCards.forEach(card => card.style.display = 'none');
+
+        if (topicArray.length > 0) {
+            topicArray.forEach(card => {
+                card.style.display = 'block';
+                topicsList.appendChild(card);
+            });
+        } else {
+            const noResults = document.createElement('div');
+            noResults.className = 'text-center text-light';
+            noResults.innerHTML = '<p>Konular bulunamadı.</p>';
+            topicsList.appendChild(noResults);
+        }
     }
 
     // Event listeners
-    searchInput.addEventListener('input', filterTopics);
-    categoryFilter.addEventListener('change', filterTopics);
+    searchInput.addEventListener('input', filterAndSortTopics);
+    categoryFilter.addEventListener('change', filterAndSortTopics);
+    sortFilter.addEventListener('change', filterAndSortTopics);
     
     resetButton.addEventListener('click', () => {
         searchInput.value = '';
         categoryFilter.value = '';
-        topicCards.forEach(card => card.classList.remove('hidden'));
+        sortFilter.value = 'latest';
+        document.querySelectorAll('.topic-card').forEach(card => card.style.display = 'block');
+        filterAndSortTopics();
     });
 
-    // Form validation (existing code)
+    // Initial sort
+    filterAndSortTopics();
+
+    // Form validation
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function(event) {
@@ -245,6 +298,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (response.data.success) {
                         this.querySelector('i').nextSibling.textContent = ' ' + response.data.upvotes;
                         this.nextElementSibling.querySelector('i').nextSibling.textContent = ' ' + response.data.downvotes;
+                        // Upvote sonrası sayfayı güncelle
+                        filterAndSortTopics();
+                        // İlgili kartın data attribute'unu güncelle
+                        const card = this.closest('.topic-card');
+                        card.setAttribute('data-upvotes', response.data.upvotes);
                     }
                 })
                 .catch(error => {
@@ -261,6 +319,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (response.data.success) {
                         this.querySelector('i').nextSibling.textContent = ' ' + response.data.downvotes;
                         this.previousElementSibling.querySelector('i').nextSibling.textContent = ' ' + response.data.upvotes;
+                        // Downvote sonrası sayfayı güncelle
+                        filterAndSortTopics();
+                        // İlgili kartın data attribute'unu güncelle
+                        const card = this.closest('.topic-card');
+                        card.setAttribute('data-upvotes', response.data.upvotes);
                     }
                 })
                 .catch(error => {

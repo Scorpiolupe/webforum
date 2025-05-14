@@ -12,7 +12,10 @@
                 <small class="text-muted text-light">
                     <i class="fas fa-user"></i><a class="text-light" style="text-decoration: none;" href="/profile/{{ $topic->user->id }}"> {{ $topic->user->username }}</a> |
                     <i class="fas fa-folder"></i> {{ $topic->category->name }} |
-                    <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }} |
+                    <i class="fas fa-clock"></i> {{ $topic->created_at->diffForHumans() }}
+                    @if($topic->updated_at != $topic->created_at)
+                        | <i class="fas fa-edit"></i> {{ $topic->updated_at->diffForHumans() }} düzenlendi
+                    @endif |
                     <i class="fas fa-eye"></i> {{ $topic->view_count }} görüntülenme
                 </small>
                 @if($topic->is_locked)
@@ -28,9 +31,18 @@
             </div>
             <div class="card-footer d-flex justify-content-between">
                 @if (Auth::id()==$topic->user_id)
-                    <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-warning btn-sm">
-                        <i class="fas fa-edit"></i> Düzenle
-                    </a>
+                    <div>
+                        <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Düzenle
+                        </a>
+                        <form action="{{ route('topics.destroy', $topic->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu konuyu silmek istediğinize emin misiniz?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Sil
+                            </button>
+                        </form>
+                    </div>
                 @endif
             </div>
             
@@ -47,8 +59,29 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <strong class="text-light">{{ $reply->user->username }}</strong>
-                                    <small class="text-muted">{{ $reply->created_at->diffForHumans() }}</small>
+                                    <small class="text-muted">
+                                        {{ $reply->created_at->diffForHumans() }}
+                                        @if($reply->updated_at != $reply->created_at)
+                                            | <i class="fas fa-edit"></i> {{ $reply->updated_at->diffForHumans() }} düzenlendi
+                                        @endif
+                                    </small>
                                 </div>
+                                @if(Auth::id() == $reply->user_id || (Auth::check() && Auth::user()->is_admin))
+                                    <div>
+                                        @if(Auth::id() == $reply->user_id)
+                                            <a href="{{ route('topics.editReply', ['question' => $topic->id, 'reply' => $reply->id]) }}" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i> Düzenle
+                                            </a>
+                                        @endif
+                                        <form action="{{ route('topics.destroyReply', ['question' => $topic->id, 'reply' => $reply->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Bu yanıtı silmek istediğinize emin misiniz?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Sil
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
                             </div>
                             <div class="reply-content text-light mt-2">
                                 {{ $reply->content }}
