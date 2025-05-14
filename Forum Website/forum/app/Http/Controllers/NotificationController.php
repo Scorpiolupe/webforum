@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
@@ -24,7 +25,7 @@ class NotificationController extends Controller
     {
         try {
             DB::table('notifications')
-                ->where('notifiable_id', auth()->id())
+                ->where('notifiable_id', Auth::id())
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
 
