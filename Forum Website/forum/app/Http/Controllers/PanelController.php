@@ -52,7 +52,12 @@ class PanelController extends Controller
             ->take(10)
             ->get();
 
-      
+        $replies = Topic::with(['user', 'replies.user'])
+            ->where('is_approved', true)
+            ->get()
+            ->flatMap->replies
+            ->sortByDesc('created_at');
+
         $recentActivities = []; 
 
         return view('panel', compact(
@@ -65,7 +70,8 @@ class PanelController extends Controller
             'pendingQuestionsList',
             'questionsList',
             'recentActivities',
-            'contacts'
+            'contacts',
+            'replies'
         ));
     }
 
@@ -265,5 +271,38 @@ class PanelController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function deleteReply(Request $request)
+    {
+        try {
+            $topic = Topic::findOrFail($request->topic_id);
+            $reply = $topic->replies()->findOrFail($request->reply_id);
+            
+            // Yanıtı sil
+            $reply->delete();
+            
+            // Yanıt sayacını güncelle
+            $topic->decrement('answer_count');
 
+            // Kullanıcıya bildirim gönder
+            DB::table('notifications')->insert([
+                'id' => Str::uuid()->toString(),
+                'type' => 'App\Notifications\ReplyDeleted',
+                'notifiable_type' => 'App\Models\User',
+                'notifiable_id' => $reply->user_id,
+                'data' => json_encode([
+                    'message' => 'Yanıtınız yönetici tarafından silindi.',
+                    'topic_id' => $topic->id
+                ]),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

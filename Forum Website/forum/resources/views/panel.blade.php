@@ -6,15 +6,7 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Admin Paneli</h4>
-            <div>
-                <button class="btn btn-outline-light btn-sm me-2">
-                    <i class="fas fa-bell me-1"></i>
-                    <span class="badge bg-danger">3</span>
-                </button>
-                <button class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-cog"></i>
-                </button>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -373,6 +365,58 @@
                                     <td colspan="3" class="text-center py-4 text-secondary">
                                         <i class="fas fa-inbox fa-2x mb-3"></i>
                                         <p class="mb-0">Mesaj bulunmamaktadır</p>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yanıtlar Tablosu -->
+            <div class="card bg-dark text-white border-0 shadow-sm mb-4">
+                <div class="card-header border-0 py-3">
+                    <h5 class="mb-0"><i class="fas fa-comments me-2 text-info"></i>Yanıtlar</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle">
+                            <thead>
+                                <tr class="text-secondary">
+                                    <th>Yanıt</th>
+                                    <th>Konu</th>
+                                    <th>Yazan</th>
+                                    <th>Tarih</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($replies ?? [] as $reply)
+                                <tr>
+                                    <td class="text-light">{{ Str::limit($reply->content, 50) }}</td>
+                                    <td>
+                                        <a href="{{ route('topics.show', $reply->topic_id) }}" class="text-light text-decoration-none">
+                                            {{ Str::limit($reply->topic->title, 30) }}
+                                        </a>
+                                    </td>
+                                    <td class="text-light">{{ $reply->user->username ?? 'Silinmiş' }}</td>
+                                    <td class="text-secondary">{{ $reply->created_at->diffForHumans() }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-outline-danger delete-reply-btn" 
+                                                    data-id="{{ $reply->id }}"
+                                                    data-topic-id="{{ $reply->topic_id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-secondary">
+                                        <i class="fas fa-comments fa-2x mb-3"></i>
+                                        <p class="mb-0">Henüz yanıt bulunmamaktadır</p>
                                     </td>
                                 </tr>
                                 @endforelse
@@ -877,6 +921,32 @@
         window.location.href = '{{ route("topics") }}' + '/' + questionId + '/edit';
     });
 
+    // Yanıt silme işlemi için
+    $(document).on('click', '.delete-reply-btn', function() {
+        if(confirm('Bu yanıtı silmek istediğinize emin misiniz?')) {
+            const replyId = $(this).data('id');
+            const topicId = $(this).data('topic-id');
+            const row = $(this).closest('tr');
+            
+            $.ajax({
+                url: '/panel/reply-delete',
+                type: 'POST',
+                data: {
+                    reply_id: replyId,
+                    topic_id: topicId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if(response.success) {
+                        row.fadeOut();
+                    }
+                },
+                error: function(xhr) {
+                    alert('Bir hata oluştu: ' + xhr.responseJSON.message);
+                }
+            });
+        }
+    });
 
 </script>
 @endpush
